@@ -139,12 +139,13 @@ async function talkToWarlock(state, warlock) {
     const options = [];
     let text;
 
+    const trialName = trialData["trial-name"] || "";
     if (trialState.state === TRIAL.AVAILABLE) {
       text = i === 0 ? warlock["npc-greeting-text"] : trialData["trial-information"];
-      options.push({ id: "accept", label: `I accept the ${ORDINALS[i]} trial` });
+      options.push({ id: "accept", label: `I accept the ${ORDINALS[i]} trial`, note: trialName });
     } else {
       text = trialData["trial-information"];
-      options.push({ id: "complete", label: "I have completed your quest" });
+      options.push({ id: "complete", label: "I have completed your quest", note: trialName });
     }
 
     options.push({
