@@ -1,0 +1,11 @@
+{
+  "name": "chanko-bd-project",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Top-down tile game, plain HTML/CSS/JS, no build step.",
+  "scripts": {
+    "serve": "npx http-server . -p 8080 -c-1",
+    "map-preview": "node tools/map-preview.js"
+  }
+}

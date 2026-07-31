@@ -4,3 +4,5 @@ Thumbs.db
 desktop.ini
 *.log
 .vscode/settings.json
+
+tools/preview/
