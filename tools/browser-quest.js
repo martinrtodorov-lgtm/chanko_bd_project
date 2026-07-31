@@ -1,4 +1,4 @@
-// Drive the Warlock conversation: hint check, accepting trial 1, a wrong code,
+﻿// Drive the Warlock conversation: hint check, accepting trial 1, a wrong code,
 // then the real code.
 const { chromium } = require("playwright-core");
 const SHOTS = __dirname + "/shots";
@@ -23,7 +23,7 @@ const log = (...a) => console.log(...a);
   };
 
   // Reach the map once so a save exists in the expected shape.
-  await page.goto("http://127.0.0.1:8080/", { waitUntil: "networkidle", timeout: 120000 });
+  await page.goto((process.argv[2] || "http://127.0.0.1:8080/"), { waitUntil: "networkidle", timeout: 120000 });
   await page.waitForFunction(() => !document.getElementById("btn-start").disabled, null, { timeout: 120000 });
   await page.click("#btn-start");
   await page.waitForSelector(".layer-faction");
@@ -46,7 +46,7 @@ const log = (...a) => console.log(...a);
   const page2 = await browser.newPage({ viewport: { width: 1400, height: 900 } });
   page2.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
   page2.on("console", (m) => { if (m.type() === "error") errors.push(`console.error: ${m.text()}`); });
-  await page2.goto("http://127.0.0.1:8080/", { waitUntil: "networkidle", timeout: 120000 });
+  await page2.goto((process.argv[2] || "http://127.0.0.1:8080/"), { waitUntil: "networkidle", timeout: 120000 });
 
   // Park Chanko beside the Warlock, who always stands at tile (108, 62).
   await page2.evaluate((json) => {
@@ -130,3 +130,4 @@ const log = (...a) => console.log(...a);
   await browser.close();
   process.exit(errors.length ? 1 : 0);
 })().catch((e) => { console.error("DRIVER FAILED: " + e.message); process.exit(2); });
+

@@ -6,6 +6,9 @@
   "description": "Top-down tile game, plain HTML/CSS/JS, no build step.",
   "scripts": {
     "serve": "npx http-server . -p 8080 -c-1",
-    "map-preview": "node tools/map-preview.js"
+    "test": "node tools/test.js && node tools/verify.js",
+    "map-preview": "node tools/map-preview.js",
+    "smoke": "node tools/browser-smoke.js",
+    "smoke:live": "node tools/browser-smoke.js https://martinrtodorov-lgtm.github.io/chanko_bd_project/"
   }
 }
