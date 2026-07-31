@@ -1,0 +1,111 @@
+{
+  "player": {
+    "idle": "assets/sprites/player/idle.png",
+    "walk": {
+      "up": [
+        "assets/sprites/player/walk-up-0.png",
+        "assets/sprites/player/walk-up-1.png",
+        "assets/sprites/player/walk-up-2.png",
+        "assets/sprites/player/walk-up-3.png"
+      ],
+      "down": [
+        "assets/sprites/player/walk-down-0.png",
+        "assets/sprites/player/walk-down-1.png",
+        "assets/sprites/player/walk-down-2.png",
+        "assets/sprites/player/walk-down-3.png"
+      ],
+      "left": [
+        "assets/sprites/player/walk-left-0.png",
+        "assets/sprites/player/walk-left-1.png",
+        "assets/sprites/player/walk-left-2.png",
+        "assets/sprites/player/walk-left-3.png"
+      ],
+      "right": [
+        "assets/sprites/player/walk-right-0.png",
+        "assets/sprites/player/walk-right-1.png",
+        "assets/sprites/player/walk-right-2.png",
+        "assets/sprites/player/walk-right-3.png"
+      ]
+    },
+    "attack": {
+      "up": [
+        "assets/sprites/player/attack-up-0.png",
+        "assets/sprites/player/attack-up-1.png"
+      ],
+      "down": [
+        "assets/sprites/player/attack-down-0.png",
+        "assets/sprites/player/attack-down-1.png"
+      ],
+      "left": [
+        "assets/sprites/player/attack-left-0.png",
+        "assets/sprites/player/attack-left-1.png"
+      ],
+      "right": [
+        "assets/sprites/player/attack-right-0.png",
+        "assets/sprites/player/attack-right-1.png"
+      ]
+    }
+  },
+  "npcs": {
+    "pirate": {
+      "idle": "assets/sprites/npc/pirate/idle.png",
+      "frames": [
+        "assets/sprites/npc/pirate/pose-01.png",
+        "assets/sprites/npc/pirate/pose-02.png",
+        "assets/sprites/npc/pirate/pose-03.png",
+        "assets/sprites/npc/pirate/pose-04.png",
+        "assets/sprites/npc/pirate/pose-05.png",
+        "assets/sprites/npc/pirate/pose-06.png",
+        "assets/sprites/npc/pirate/pose-07.png",
+        "assets/sprites/npc/pirate/pose-08.png",
+        "assets/sprites/npc/pirate/pose-09.png",
+        "assets/sprites/npc/pirate/pose-10.png",
+        "assets/sprites/npc/pirate/pose-11.png",
+        "assets/sprites/npc/pirate/pose-12.png",
+        "assets/sprites/npc/pirate/pose-13.png",
+        "assets/sprites/npc/pirate/pose-14.png",
+        "assets/sprites/npc/pirate/pose-15.png",
+        "assets/sprites/npc/pirate/pose-16.png",
+        "assets/sprites/npc/pirate/pose-17.png",
+        "assets/sprites/npc/pirate/pose-18.png",
+        "assets/sprites/npc/pirate/pose-19.png",
+        "assets/sprites/npc/pirate/pose-20.png",
+        "assets/sprites/npc/pirate/pose-21.png",
+        "assets/sprites/npc/pirate/pose-22.png",
+        "assets/sprites/npc/pirate/pose-23.png",
+        "assets/sprites/npc/pirate/pose-24.png"
+      ]
+    },
+    "viking": {
+      "idle": "assets/sprites/npc/viking/idle.png",
+      "frames": [
+        "assets/sprites/npc/viking/pose-01.png",
+        "assets/sprites/npc/viking/pose-02.png",
+        "assets/sprites/npc/viking/pose-03.png",
+        "assets/sprites/npc/viking/pose-04.png",
+        "assets/sprites/npc/viking/pose-05.png",
+        "assets/sprites/npc/viking/pose-06.png",
+        "assets/sprites/npc/viking/pose-07.png",
+        "assets/sprites/npc/viking/pose-08.png",
+        "assets/sprites/npc/viking/pose-09.png",
+        "assets/sprites/npc/viking/pose-10.png",
+        "assets/sprites/npc/viking/pose-11.png",
+        "assets/sprites/npc/viking/pose-12.png",
+        "assets/sprites/npc/viking/pose-13.png",
+        "assets/sprites/npc/viking/pose-14.png",
+        "assets/sprites/npc/viking/pose-15.png",
+        "assets/sprites/npc/viking/pose-16.png",
+        "assets/sprites/npc/viking/pose-17.png",
+        "assets/sprites/npc/viking/pose-18.png"
+      ]
+    },
+    "warlock": {
+      "idle": "assets/sprites/npc/warlock/idle.png",
+      "frames": [
+        "assets/sprites/npc/warlock/pose-01.png",
+        "assets/sprites/npc/warlock/pose-02.png",
+        "assets/sprites/npc/warlock/pose-03.png"
+      ]
+    }
+  }
+}
