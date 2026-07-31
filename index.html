@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chanko</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+  <!-- Start screen: image is a CSS background, buttons are real DOM elements -->
+  <section id="start-screen" class="screen is-active">
+    <div class="start-menu">
+      <button id="btn-start" class="menu-button" type="button">Start</button>
+      <button id="btn-continue" class="menu-button" type="button" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- Game screen -->
+  <section id="game-screen" class="screen">
+    <canvas id="game-canvas" width="1280" height="720"></canvas>
+  </section>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
