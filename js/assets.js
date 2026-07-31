@@ -1,5 +1,7 @@
 // Image loading. Everything is fetched up front so the game loop never waits.
 
+import { T } from "./map.js";
+
 const cache = new Map();
 
 function loadImage(src) {
@@ -15,6 +17,24 @@ function loadImage(src) {
 }
 
 export const DIRS = ["up", "down", "left", "right"];
+
+// Optional tile artwork. Any file that is absent simply falls back to the
+// procedural look, so the game runs with or without these.
+export const TILE_ART_PATHS = {
+  [T.FLOOR]: "assets/tiles/houses/floor.png",
+  [T.WALL]: "assets/tiles/houses/wall.png",
+  [T.DOOR]: "assets/tiles/houses/door.png",
+  [T.DECK]: "assets/tiles/pool/deck.png",
+};
+
+function loadOptional(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
 
 export async function loadAssets(onProgress = () => {}) {
   const [spriteIndex, npcs, warlock, info] = await Promise.all([
@@ -46,15 +66,34 @@ export async function loadAssets(onProgress = () => {}) {
     )
   );
 
-  return { spriteIndex, npcs, warlock, info, images };
+  // Nicknames drive the on-map nameplates.
+  const nicknames = {};
+  for (const npc of npcs) nicknames[npc["npc-label"]] = npc["npc-nickname"] || npc["npc-label"];
+  nicknames.warlock = warlock["npc-nickname"] || "Warlock";
+
+  // Optional tile artwork, keyed by tile type.
+  const tileArt = {};
+  await Promise.all(
+    Object.entries(TILE_ART_PATHS).map(([t, p]) =>
+      loadOptional(`./${p}`).then((img) => { if (img) tileArt[t] = img; })
+    )
+  );
+
+  return { spriteIndex, npcs, warlock, info, images, nicknames, tileArt };
 }
 
 // Frame lookup helpers ------------------------------------------------------
 
 export function playerFrame(assets, dir, action, frame) {
   const idx = assets.spriteIndex.player;
-  if (action === "walk") return assets.images[idx.walk[dir][frame % 4]];
-  if (action === "attack") return assets.images[idx.attack[dir][frame % 2]];
+  if (action === "walk") {
+    const frames = idx.walk[dir];
+    return assets.images[frames[frame % frames.length]];
+  }
+  if (action === "attack") {
+    const frames = idx.attack[dir];
+    return assets.images[frames[frame % frames.length]];
+  }
   return assets.images[idx.idle];
 }
 

@@ -11,7 +11,7 @@ import {
 } from "./ui.js";
 import { interactWith } from "./interact.js";
 
-const SPEED = 175;              // px per second
+const SPEED = 350;              // px per second
 const BODY_W = 20, BODY_H = 14; // collision box around the feet
 const WALK_FRAME_MS = 130;
 const ATTACK_MS = 320;
@@ -96,11 +96,12 @@ function update(dt) {
   }
 
   if (dx || dy) {
-    // Facing: vertical wins ties so diagonal movement reads clearly
-    if (dy < 0) state.player.dir = "up";
+    // Facing: horizontal wins ties. The left and right frame sets are the only
+    // fully consistent ones, so diagonals should prefer them.
+    if (dx < 0) state.player.dir = "left";
+    else if (dx > 0) state.player.dir = "right";
+    else if (dy < 0) state.player.dir = "up";
     else if (dy > 0) state.player.dir = "down";
-    if (dx < 0 && !dy) state.player.dir = "left";
-    else if (dx > 0 && !dy) state.player.dir = "right";
 
     const len = Math.hypot(dx, dy) || 1;
     const step = SPEED * dt;
@@ -125,7 +126,7 @@ function update(dt) {
 
 function draw() {
   const cam = cameraFor(state.player);
-  drawWorld(ctx, map, cam);
+  drawWorld(ctx, map, cam, assets.tileArt);
   drawEntities(ctx, state, assets, cam, anim, isOverlayOpen() ? null : nearestNpc());
 }
 

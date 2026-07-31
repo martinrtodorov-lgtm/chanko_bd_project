@@ -8,6 +8,7 @@ export const QUEST = { NONE: "not-accepted", ACCEPTED: "accepted", DONE: "comple
 export const TRIAL = { LOCKED: "locked", AVAILABLE: "available", ACCEPTED: "accepted", DONE: "completed" };
 
 export const PLAYER_TEAM_CAP = 8;   // Chanko + 7
+export const ENEMY_TEAM_CAP = 8;
 export const DC_OWN_TEAM = 13;
 export const DC_OPPOSING = 18;
 export const DC_WARLOCK_HINT = 15;
@@ -74,14 +75,21 @@ export function createState(faction, npcData) {
 export const playerTeamCount = (state) =>
   1 + Object.values(state.teams).filter((t) => t === TEAM.PLAYER).length;
 
+export const enemyTeamCount = (state) =>
+  Object.values(state.teams).filter((t) => t === TEAM.ENEMY).length;
+
 export const neutralCount = (state) =>
   Object.values(state.teams).filter((t) => t === TEAM.NEUTRAL).length;
 
 export const canCloseTeams = (state) => neutralCount(state) === 0;
 
+/** Returns true on success, or a reason string when the cap blocks the move. */
 export function assignTeam(state, label, team) {
   if (team === TEAM.PLAYER && state.teams[label] !== TEAM.PLAYER) {
-    if (playerTeamCount(state) >= PLAYER_TEAM_CAP) return false;
+    if (playerTeamCount(state) >= PLAYER_TEAM_CAP) return "player-full";
+  }
+  if (team === TEAM.ENEMY && state.teams[label] !== TEAM.ENEMY) {
+    if (enemyTeamCount(state) >= ENEMY_TEAM_CAP) return "enemy-full";
   }
   state.teams[label] = team;
   return true;

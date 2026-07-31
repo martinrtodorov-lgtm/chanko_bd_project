@@ -2,8 +2,12 @@
 // (GitHub Pages is case-sensitive, Windows is not), and spawning behaves.
 import fs from "fs";
 import path from "path";
-import { createState, WARLOCK_TILE } from "../js/state.js";
-import { generateMap, canWalk, computeReachable, SPAWN_ANCHOR, MAP_W } from "../js/map.js";
+import {
+  createState, WARLOCK_TILE, PLAYER_TEAM_CAP, ENEMY_TEAM_CAP,
+} from "../js/state.js";
+import {
+  generateMap, canWalk, computeReachable, SPAWN_ANCHOR, MAP_W, POOL, HOUSE, HOUSE_XS, T, tileAt,
+} from "../js/map.js";
 
 let fails = 0;
 const fail = (m) => { console.log(`FAIL  ${m}`); fails++; };
@@ -97,6 +101,49 @@ if (bad) fail(`${bad} NPC spawns landed on unreachable or blocked tiles across 4
 else ok("600 NPC spawns across 40 runs all reachable");
 if (collisions) fail(`${collisions} overlapping NPC spawns`);
 else ok("no overlapping spawns");
+
+// --- Team caps must still allow every NPC to be assigned -------------------
+
+const assignable = (PLAYER_TEAM_CAP - 1) + ENEMY_TEAM_CAP;
+if (assignable < npcs.length) {
+  fail(`caps allow only ${assignable} placements for ${npcs.length} NPCs — the teams menu could never be closed`);
+} else {
+  ok(`team caps admit all ${npcs.length} NPCs (player ${PLAYER_TEAM_CAP - 1} + enemy ${ENEMY_TEAM_CAP})`);
+  if (assignable === npcs.length) {
+    console.log(`NOTE  the split is forced: exactly ${PLAYER_TEAM_CAP - 1} with you and ${ENEMY_TEAM_CAP} against you`);
+  }
+}
+
+// --- Houses must be enterable ---------------------------------------------
+
+let doorless = 0, sealed = 0;
+for (const hx of HOUSE_XS) {
+  let doors = 0;
+  for (let x = hx; x <= hx + HOUSE.w; x++) {
+    if (tileAt(map, x, HOUSE.y1) === T.DOOR) doors++;
+  }
+  if (!doors) doorless++;
+  const inside = { x: hx + Math.floor(HOUSE.w / 2), y: HOUSE.y0 + Math.floor((HOUSE.y1 - HOUSE.y0) / 2) };
+  if (tileAt(map, inside.x, inside.y) !== T.FLOOR) sealed++;
+  else if (!reach[inside.y * MAP_W + inside.x]) sealed++;
+}
+if (doorless) fail(`${doorless} house(s) have no doorway`);
+else ok(`all ${HOUSE_XS.length} houses have a doorway on the south wall`);
+if (sealed) fail(`${sealed} house interior(s) are not reachable through the door`);
+else ok("every house interior is reachable from outside");
+
+// --- Pool geometry ---------------------------------------------------------
+
+const pw = POOL.x1 - POOL.x0 + 1, ph = POOL.y1 - POOL.y0 + 1;
+let deckRing = true;
+for (let x = POOL.x0 - 1; x <= POOL.x1 + 1; x++) {
+  if (tileAt(map, x, POOL.y0 - 1) !== T.DECK || tileAt(map, x, POOL.y1 + 1) !== T.DECK) deckRing = false;
+}
+for (let y = POOL.y0 - 1; y <= POOL.y1 + 1; y++) {
+  if (tileAt(map, POOL.x0 - 1, y) !== T.DECK || tileAt(map, POOL.x1 + 1, y) !== T.DECK) deckRing = false;
+}
+if (!deckRing) fail("pool is not fully ringed by deck tiles");
+else ok(`pool is ${pw}x${ph} tiles, fully ringed by deck`);
 
 console.log(fails ? `\n${fails} check(s) failed` : "\nall checks passed");
 process.exit(fails ? 1 : 0);

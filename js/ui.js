@@ -1,7 +1,10 @@
 // DOM overlays: faction select, teams menu, dialogue, code entry, info, ending.
 // Each returns a promise so the caller can drive flow linearly.
 
-import { TEAM, PLAYER_TEAM_CAP, playerTeamCount, canCloseTeams, assignTeam, neutralCount } from "./state.js";
+import {
+  TEAM, PLAYER_TEAM_CAP, ENEMY_TEAM_CAP, playerTeamCount, enemyTeamCount,
+  canCloseTeams, assignTeam, neutralCount,
+} from "./state.js";
 
 const root = document.getElementById("overlay");
 let openCount = 0;
@@ -144,9 +147,11 @@ export function showTeams(state, { forced = false } = {}) {
         li.className = "team-entry";
 
         const move = (to) => {
-          const ok = assignTeam(state, label, to);
-          if (!ok) {
-            hint.textContent = `Your team is full (${PLAYER_TEAM_CAP} including Chanko).`;
+          const result = assignTeam(state, label, to);
+          if (result !== true) {
+            hint.textContent = result === "player-full"
+              ? `Your team is full — ${PLAYER_TEAM_CAP} including Chanko.`
+              : `The opposing team is full — ${ENEMY_TEAM_CAP} maximum.`;
             hint.classList.add("warn");
             return;
           }
@@ -177,8 +182,7 @@ export function showTeams(state, { forced = false } = {}) {
 
       counts[TEAM.PLAYER].textContent = `${playerTeamCount(state)} / ${PLAYER_TEAM_CAP}`;
       counts[TEAM.NEUTRAL].textContent = `${neutralCount(state)}`;
-      counts[TEAM.ENEMY].textContent =
-        `${Object.values(state.teams).filter((t) => t === TEAM.ENEMY).length}`;
+      counts[TEAM.ENEMY].textContent = `${enemyTeamCount(state)} / ${ENEMY_TEAM_CAP}`;
 
       const closable = canCloseTeams(state);
       closeBtn.disabled = !closable;
@@ -223,16 +227,16 @@ export function showDialogue({ portraitSrc, name, profession, text, options, dis
   return new Promise((resolve) => {
     const layer = panel("layer-dialogue");
     layer.innerHTML = `
-      <div class="dialog dialog-npc">
-        <div class="npc-head">
-          <img class="npc-portrait" src="${portraitSrc}" alt="">
-          <div class="npc-id">
+      <div class="dialog dialog-npc${portraitSrc ? "" : " no-portrait"}">
+        ${portraitSrc ? `<div class="npc-portrait-pane"><img src="${portraitSrc}" alt=""></div>` : ""}
+        <div class="npc-body">
+          <header class="npc-id">
             <h2>${name}</h2>
-            <p class="profession">${profession}</p>
-          </div>
+            ${profession ? `<p class="profession">${profession}</p>` : ""}
+          </header>
+          <p class="npc-text"></p>
+          <div class="npc-options"></div>
         </div>
-        <p class="npc-text"></p>
-        <div class="npc-options"></div>
       </div>`;
     layer.querySelector(".npc-text").textContent = text;
 

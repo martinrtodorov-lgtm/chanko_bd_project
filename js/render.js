@@ -27,7 +27,7 @@ export function cameraFor(player) {
   return { x: Math.round(player.x - VIEW_W / 2), y: Math.round(player.y - VIEW_H / 2) };
 }
 
-function drawTile(ctx, map, tx, ty, sx, sy) {
+function drawTile(ctx, map, tx, ty, sx, sy, art) {
   const t = tileAt(map, tx, ty);
   const base = PALETTE[t] || "#000";
 
@@ -40,6 +40,13 @@ function drawTile(ctx, map, tx, ty, sx, sy) {
   const n = hash(tx, ty);
   ctx.fillStyle = base;
   ctx.fillRect(sx, sy, TILE, TILE);
+
+  // Supplied tile artwork wins over the procedural look, when it exists.
+  const img = art && art[t];
+  if (img) {
+    ctx.drawImage(img, sx, sy, TILE, TILE);
+    return;
+  }
 
   switch (t) {
     case T.GRASS:
@@ -93,6 +100,34 @@ function drawTile(ctx, map, tx, ty, sx, sy) {
       ctx.fillRect(sx, sy + ((n * 28) | 0), TILE, 2);
       break;
     }
+    case T.DECK: {
+      // Paved apron around the pool
+      ctx.fillStyle = shade(base, n > 0.5 ? 10 : -10);
+      ctx.fillRect(sx, sy, TILE, TILE);
+      ctx.strokeStyle = shade(base, -28);
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sx + 0.5, sy + 0.5, TILE - 1, TILE - 1);
+      break;
+    }
+    case T.FLOOR: {
+      // Floorboards
+      ctx.fillStyle = shade(base, -14);
+      ctx.fillRect(sx, sy + 10, TILE, 1);
+      ctx.fillRect(sx, sy + 22, TILE, 1);
+      ctx.fillStyle = shade(base, n > 0.5 ? 8 : -6);
+      ctx.fillRect(sx + ((n * 20) | 0), sy + 2, 6, 6);
+      break;
+    }
+    case T.DOOR: {
+      ctx.fillStyle = shade(PALETTE[T.WALL], -10);
+      ctx.fillRect(sx, sy, TILE, TILE);
+      ctx.fillStyle = base;
+      ctx.fillRect(sx + 3, sy + 2, TILE - 6, TILE - 2);
+      ctx.fillStyle = "#e8c477";
+      ctx.fillRect(sx + TILE - 10, sy + 16, 4, 4);
+      break;
+    }
+    case T.WALL:
     case T.HOUSE:
     case T.TAVERN: {
       // Outline the silhouette so multi-tile buildings read as buildings
@@ -111,7 +146,7 @@ function drawTile(ctx, map, tx, ty, sx, sy) {
   }
 }
 
-export function drawWorld(ctx, map, cam) {
+export function drawWorld(ctx, map, cam, art) {
   const t0x = Math.floor(cam.x / TILE) - 1;
   const t0y = Math.floor(cam.y / TILE) - 1;
   const cols = Math.ceil(VIEW_W / TILE) + 2;
@@ -123,7 +158,7 @@ export function drawWorld(ctx, map, cam) {
   for (let ry = 0; ry < rows; ry++) {
     for (let rx = 0; rx < cols; rx++) {
       const tx = t0x + rx, ty = t0y + ry;
-      drawTile(ctx, map, tx, ty, tx * TILE - cam.x, ty * TILE - cam.y);
+      drawTile(ctx, map, tx, ty, tx * TILE - cam.x, ty * TILE - cam.y, art);
     }
   }
 }
@@ -140,6 +175,7 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel) {
   for (const [label, pos] of Object.entries(state.npcs)) {
     list.push({
       label,
+      name: assets.nicknames[label] || label,
       cx: (pos.x + 0.5) * TILE,
       footY: (pos.y + 1) * TILE,
       img: npcFrame(assets, npcSpriteKey(state, label)),
@@ -148,6 +184,7 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel) {
   }
   list.push({
     label: "warlock",
+    name: assets.nicknames.warlock || "Warlock",
     cx: (WARLOCK_TILE.x + 0.5) * TILE,
     footY: (WARLOCK_TILE.y + 1) * TILE,
     img: npcFrame(assets, "warlock"),
@@ -178,12 +215,30 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel) {
 
     drawSprite(ctx, e.img, sx, sy, e.h);
 
+    // Nameplate, so two NPCs sharing a skin stay tellable apart
+    if (e.name) {
+      const top = sy - e.h;
+      ctx.save();
+      ctx.font = "bold 13px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const w = ctx.measureText(e.name).width + 12;
+      ctx.fillStyle = "rgba(8, 6, 4, 0.72)";
+      ctx.fillRect(sx - w / 2, top - 22, w, 17);
+      ctx.strokeStyle = e.label === nearbyLabel ? "#ffd23c" : "rgba(107, 87, 58, 0.9)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(sx - w / 2 + 0.5, top - 21.5, w - 1, 16);
+      ctx.fillStyle = e.label === nearbyLabel ? "#ffd23c" : "#f2e9d8";
+      ctx.fillText(e.name, sx, top - 13);
+      ctx.restore();
+    }
+
     if (e.label && e.label === nearbyLabel) {
       ctx.save();
       ctx.fillStyle = "#ffd23c";
       ctx.font = "bold 18px system-ui, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("E", sx, sy - e.h - 10);
+      ctx.fillText("E", sx, sy - e.h - 30);
       ctx.restore();
     }
   }

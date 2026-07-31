@@ -5,8 +5,7 @@
       "up": [
         "assets/sprites/player/walk-up-0.png",
         "assets/sprites/player/walk-up-1.png",
-        "assets/sprites/player/walk-up-2.png",
-        "assets/sprites/player/walk-up-3.png"
+        "assets/sprites/player/walk-up-2.png"
       ],
       "down": [
         "assets/sprites/player/walk-down-0.png",

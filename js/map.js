@@ -21,9 +21,15 @@ export const T = {
   POOL: 9,
   HOUSE: 10,
   LAWN: 11,
+  DECK: 12,
+  WALL: 13,
+  FLOOR: 14,
+  DOOR: 15,
 };
 
-const IMPASSABLE = new Set([T.VOID, T.WATER, T.TREE, T.FENCE, T.TAVERN, T.POOL, T.HOUSE]);
+const IMPASSABLE = new Set([
+  T.VOID, T.WATER, T.TREE, T.FENCE, T.TAVERN, T.POOL, T.HOUSE, T.WALL,
+]);
 export const isPassable = (t) => !IMPASSABLE.has(t);
 
 export const PALETTE = {
@@ -39,6 +45,10 @@ export const PALETTE = {
   [T.POOL]: "#3f9ec4",
   [T.HOUSE]: "#8d5a38",
   [T.LAWN]: "#5f9a52",
+  [T.DECK]: "#9a9a9a",
+  [T.WALL]: "#8d5a38",
+  [T.FLOOR]: "#a8845c",
+  [T.DOOR]: "#4a2f19",
 };
 
 // --- Region boundaries -----------------------------------------------------
@@ -54,6 +64,20 @@ export const REGION = {
   VILLA_Y1: 109,         // one screen of grass below
   GATE_Y0: 64,           // opening in the left fence, map vertical centre
   GATE_Y1: 68,
+};
+
+// Pool: same centre as before (178, 44), half the width and half the height.
+export const POOL = { x0: 164, y0: 38, x1: 191, y1: 49 };
+
+// Four small houses along the lower half of the villa.
+export const HOUSE_XS = [82, 120, 158, 196];
+export const HOUSE = {
+  y0: 72,
+  y1: 86,
+  w: 24,
+  doorOffset: 11,   // doorway starts this far in from the left wall
+  doorW: 2,
+  lawnY1: 100,
 };
 
 // --- Seeded RNG ------------------------------------------------------------
@@ -131,22 +155,27 @@ export function generateMap(seed = 20260731) {
   // Villa interior starts as clean grass
   rect(R.VILLA_X0 + 1, R.VILLA_Y0 + 1, MAP_W - 2, R.VILLA_Y1 - 1, T.GRASS);
 
-  // Upper half: tavern, and the pool to its right
+  // Upper half: tavern, and the pool to its right. The pool keeps its centre
+  // but is half as wide and half as tall, ringed by a paved deck.
   rect(84, 30, 132, 56, T.TAVERN);
-  rect(150, 32, 206, 56, T.POOL);
+  rect(POOL.x0 - 2, POOL.y0 - 2, POOL.x1 + 2, POOL.y1 + 2, T.DECK);
+  rect(POOL.x0, POOL.y0, POOL.x1, POOL.y1, T.POOL);
 
-  // Lower half: four small houses, each with a lawn beneath it
-  const houseY0 = 72, houseY1 = 86, lawnY1 = 100;
-  const houseXs = [82, 120, 158, 196];
-  for (const hx of houseXs) {
-    rect(hx, houseY0, hx + 24, houseY1, T.HOUSE);
-    rect(hx, houseY1 + 1, hx + 24, lawnY1, T.LAWN);
+  // Lower half: four small houses, each walled with a doorway on the south
+  // side and its own floor, plus a lawn beneath it.
+  for (const hx of HOUSE_XS) {
+    rect(hx, HOUSE.y0, hx + HOUSE.w, HOUSE.y1, T.WALL);
+    rect(hx + 1, HOUSE.y0 + 1, hx + HOUSE.w - 1, HOUSE.y1 - 1, T.FLOOR);
+    for (let d = 0; d < HOUSE.doorW; d++) {
+      set(hx + HOUSE.doorOffset + d, HOUSE.y1, T.DOOR);
+    }
+    rect(hx, HOUSE.y1 + 1, hx + HOUSE.w, HOUSE.lawnY1, T.LAWN);
   }
   // Occasional impassable small trees between the houses
-  for (let i = 0; i < houseXs.length - 1; i++) {
-    const gapX = houseXs[i] + 25;
-    const gapW = houseXs[i + 1] - gapX;
-    for (let y = houseY0; y <= lawnY1; y++) {
+  for (let i = 0; i < HOUSE_XS.length - 1; i++) {
+    const gapX = HOUSE_XS[i] + HOUSE.w + 1;
+    const gapW = HOUSE_XS[i + 1] - gapX;
+    for (let y = HOUSE.y0; y <= HOUSE.lawnY1; y++) {
       if (rng() < 0.22) set(gapX + Math.floor(rng() * gapW), y, T.TREE);
     }
   }
