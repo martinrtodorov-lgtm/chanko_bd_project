@@ -32,7 +32,7 @@ html, body {
 /* --- Start screen --- */
 
 #start-screen {
-  background-image: url("../assets/ui/screen-start.png");
+  background-image: url("../assets/ui/start_screen.jpg");
   background-size: cover;
   background-position: center;
   align-items: flex-end;
