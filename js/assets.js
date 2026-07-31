@@ -18,13 +18,14 @@ function loadImage(src) {
 
 export const DIRS = ["up", "down", "left", "right"];
 
-// Optional tile artwork. Any file that is absent simply falls back to the
-// procedural look, so the game runs with or without these.
+// Optional single-tile artwork, 32x32 each. Absent files fall back to the
+// procedural look. The files under assets/tiles/*/ are multi-item atlases, not
+// single tiles, so they are consumed by tools/atlas.js instead of loaded here.
 export const TILE_ART_PATHS = {
-  [T.FLOOR]: "assets/tiles/houses/floor.png",
-  [T.WALL]: "assets/tiles/houses/wall.png",
-  [T.DOOR]: "assets/tiles/houses/door.png",
-  [T.DECK]: "assets/tiles/pool/deck.png",
+  [T.FLOOR]: "assets/tiles/tile-floor.png",
+  [T.WALL]: "assets/tiles/tile-wall.png",
+  [T.DOOR]: "assets/tiles/tile-door.png",
+  [T.DECK]: "assets/tiles/tile-deck.png",
 };
 
 function loadOptional(src) {
@@ -37,11 +38,12 @@ function loadOptional(src) {
 }
 
 export async function loadAssets(onProgress = () => {}) {
-  const [spriteIndex, npcs, warlock, info] = await Promise.all([
+  const [spriteIndex, npcs, warlock, info, decor] = await Promise.all([
     fetch("./assets/sprites/sprites.json").then((r) => r.json()),
     fetch("./data/npcs.json").then((r) => r.json()),
     fetch("./data/warlock.json").then((r) => r.json()),
     fetch("./data/info.json").then((r) => r.json()),
+    fetch("./assets/decor/decor.json").then((r) => r.json()).catch(() => null),
   ]);
 
   const paths = new Set();
@@ -53,6 +55,12 @@ export async function loadAssets(onProgress = () => {}) {
   for (const npc of Object.values(spriteIndex.npcs)) paths.add(npc.idle);
   for (const npc of npcs) paths.add(npc["npc-portrait-reference"]);
   paths.add(warlock["npc-portrait-reference"]);
+  if (decor) {
+    for (const v of Object.values(decor)) {
+      if (Array.isArray(v)) v.forEach((it) => paths.add(it.src));
+      else if (v && v.src) paths.add(v.src);
+    }
+  }
 
   const list = [...paths];
   let done = 0;
@@ -79,7 +87,7 @@ export async function loadAssets(onProgress = () => {}) {
     )
   );
 
-  return { spriteIndex, npcs, warlock, info, images, nicknames, tileArt };
+  return { spriteIndex, npcs, warlock, info, decor, images, nicknames, tileArt };
 }
 
 // Frame lookup helpers ------------------------------------------------------

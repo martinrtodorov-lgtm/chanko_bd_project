@@ -127,7 +127,7 @@ function update(dt) {
 function draw() {
   const cam = cameraFor(state.player);
   drawWorld(ctx, map, cam, assets.tileArt);
-  drawEntities(ctx, state, assets, cam, anim, isOverlayOpen() ? null : nearestNpc());
+  drawEntities(ctx, state, assets, cam, anim, isOverlayOpen() ? null : nearestNpc(), map);
 }
 
 // --- Input -----------------------------------------------------------------
@@ -179,7 +179,6 @@ function endGame() {
 
 function beginPlay(loaded) {
   state = loaded;
-  map = generateMap();
   hud.classList.add("is-visible");
   showScreen("game");
   running = true;
@@ -190,7 +189,7 @@ function beginPlay(loaded) {
 
 async function newGame() {
   const faction = await showFactionSelect();
-  const fresh = createState(faction, assets.npcs);
+  const fresh = createState(faction, assets.npcs, map);
   await showTeams(fresh, { forced: true });
   save(fresh);
   beginPlay(fresh);
@@ -206,6 +205,9 @@ async function boot() {
     loadingEl.textContent = `Loading ${done} / ${total}`;
   });
   loadingEl.textContent = "";
+
+  // The world is built once, with decor, and shared by spawning and rendering.
+  map = generateMap(undefined, assets.decor);
 
   startBtn.disabled = false;
   continueBtn.disabled = !hasSave();

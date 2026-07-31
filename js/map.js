@@ -69,6 +69,13 @@ export const REGION = {
 // Pool: same centre as before (178, 44), half the width and half the height.
 export const POOL = { x0: 164, y0: 38, x1: 191, y1: 49 };
 
+// The tavern is a building you can walk into, like the houses.
+export const TAVERN = {
+  x0: 84, y0: 30, x1: 132, y1: 56,
+  doorOffset: 22,   // from the left wall
+  doorW: 3,
+};
+
 // Four small houses along the lower half of the villa.
 export const HOUSE_XS = [82, 120, 158, 196];
 export const HOUSE = {
@@ -94,9 +101,16 @@ function mulberry32(seed) {
 
 // --- Generation ------------------------------------------------------------
 
-export function generateMap(seed = 20260731) {
+/**
+ * @param seed  deterministic world seed
+ * @param decor optional catalogue from assets/decor/decor.json; when supplied,
+ *              furniture is scattered indoors and props are set around the pool
+ */
+export function generateMap(seed = 20260731, decor = null) {
   const rng = mulberry32(seed);
   const tiles = new Uint8Array(MAP_W * MAP_H);
+  const blocked = new Set();
+  const props = [];
   const set = (x, y, t) => {
     if (x >= 0 && y >= 0 && x < MAP_W && y < MAP_H) tiles[y * MAP_W + x] = t;
   };
@@ -155,9 +169,14 @@ export function generateMap(seed = 20260731) {
   // Villa interior starts as clean grass
   rect(R.VILLA_X0 + 1, R.VILLA_Y0 + 1, MAP_W - 2, R.VILLA_Y1 - 1, T.GRASS);
 
-  // Upper half: tavern, and the pool to its right. The pool keeps its centre
-  // but is half as wide and half as tall, ringed by a paved deck.
-  rect(84, 30, 132, 56, T.TAVERN);
+  // Upper half: the tavern, walled and enterable like the houses, and the pool
+  // to its right — half size, ringed by a paved deck.
+  rect(TAVERN.x0, TAVERN.y0, TAVERN.x1, TAVERN.y1, T.WALL);
+  rect(TAVERN.x0 + 1, TAVERN.y0 + 1, TAVERN.x1 - 1, TAVERN.y1 - 1, T.FLOOR);
+  for (let d = 0; d < TAVERN.doorW; d++) {
+    set(TAVERN.x0 + TAVERN.doorOffset + d, TAVERN.y1, T.DOOR);
+  }
+
   rect(POOL.x0 - 2, POOL.y0 - 2, POOL.x1 + 2, POOL.y1 + 2, T.DECK);
   rect(POOL.x0, POOL.y0, POOL.x1, POOL.y1, T.POOL);
 
@@ -180,7 +199,133 @@ export function generateMap(seed = 20260731) {
     }
   }
 
-  return { width: MAP_W, height: MAP_H, tiles };
+  // --- Decor ---------------------------------------------------------------
+
+  const idx = (x, y) => y * MAP_W + x;
+  const tileOf = (x, y) => tiles[idx(x, y)];
+
+  /** Reserve the tiles a prop stands on so the player cannot walk through it. */
+  const occupy = (tx, ty, w) => {
+    const span = Math.max(1, Math.ceil(w / TILE));
+    const x0 = tx - ((span - 1) >> 1);
+    for (let i = 0; i < span; i++) blocked.add(idx(x0 + i, ty));
+  };
+
+  const fits = (tx, ty, w, isClear) => {
+    const span = Math.max(1, Math.ceil(w / TILE));
+    const x0 = tx - ((span - 1) >> 1);
+    for (let i = 0; i < span; i++) {
+      const x = x0 + i;
+      if (!isClear(x, ty) || blocked.has(idx(x, ty))) return false;
+    }
+    return true;
+  };
+
+  const LARGE_AREA = 1500;   // roughly a bed, table, wardrobe or bar counter
+
+  /**
+   * Furnish a building. Large pieces are pushed against the walls the way real
+   * rooms are arranged; small clutter goes anywhere. Picking uniformly from the
+   * whole catalogue would bury the furniture under trinkets, since the atlases
+   * hold far more small items than big ones.
+   */
+  const furnish = (items, building, counts, doorX0, doorX1) => {
+    if (!items || !items.length) return;
+    const inner = { x0: building.x0 + 1, y0: building.y0 + 1, x1: building.x1 - 1, y1: building.y1 - 1 };
+
+    const large = items.filter((i) => i.w * i.h >= LARGE_AREA);
+    const small = items.filter((i) => i.w * i.h < LARGE_AREA);
+
+    const isClear = (x, y) => {
+      if (tileOf(x, y) !== T.FLOOR) return false;
+      // Keep the doorway and the strip in front of it walkable
+      if (x >= doorX0 - 1 && x <= doorX1 + 1 && y >= inner.y1 - 2) return false;
+      return true;
+    };
+
+    // Tiles hugging a wall, for the big pieces
+    const perimeter = [];
+    for (let x = inner.x0 + 1; x <= inner.x1 - 1; x++) {
+      perimeter.push({ x, y: inner.y0 }, { x, y: inner.y0 + 1 }, { x, y: inner.y1 });
+    }
+    for (let y = inner.y0; y <= inner.y1; y++) {
+      perimeter.push({ x: inner.x0 + 1, y }, { x: inner.x1 - 1, y });
+    }
+
+    const scatter = (pool, count, spots) => {
+      if (!pool.length) return;
+      let placed = 0;
+      for (let a = 0; a < count * 60 && placed < count; a++) {
+        const item = pool[(rng() * pool.length) | 0];
+        let tx, ty;
+        if (spots) {
+          const s = spots[(rng() * spots.length) | 0];
+          tx = s.x; ty = s.y;
+        } else {
+          tx = inner.x0 + ((rng() * (inner.x1 - inner.x0 + 1)) | 0);
+          ty = inner.y0 + ((rng() * (inner.y1 - inner.y0 + 1)) | 0);
+        }
+        if (!fits(tx, ty, item.w, isClear)) continue;
+        props.push({ src: item.src, tx, ty, w: item.w, h: item.h });
+        occupy(tx, ty, item.w);
+        placed++;
+      }
+    };
+
+    scatter(large, counts.large, perimeter);
+    scatter(small, counts.small, null);
+  };
+
+  if (decor) {
+    for (const hx of HOUSE_XS) {
+      const door0 = hx + HOUSE.doorOffset, door1 = door0 + HOUSE.doorW - 1;
+      furnish(
+        decor.house,
+        { x0: hx, y0: HOUSE.y0, x1: hx + HOUSE.w, y1: HOUSE.y1 },
+        { large: 8, small: 7 },
+        door0, door1
+      );
+    }
+    const tDoor0 = TAVERN.x0 + TAVERN.doorOffset;
+    furnish(decor.tavern, TAVERN, { large: 30, small: 26 }, tDoor0, tDoor0 + TAVERN.doorW - 1);
+
+    // The ship sits in the middle of the pool; the water already blocks movement.
+    if (decor.ship) {
+      props.push({
+        src: decor.ship.src,
+        tx: ((POOL.x0 + POOL.x1) / 2) | 0,
+        ty: ((POOL.y0 + POOL.y1) / 2) | 0,
+        w: decor.ship.w, h: decor.ship.h, float: true,
+      });
+    }
+
+    // Flags, anchor and barrels around the poolside deck.
+    const deckSpots = [];
+    for (let x = POOL.x0 - 2; x <= POOL.x1 + 2; x++) {
+      deckSpots.push({ x, y: POOL.y0 - 2 }, { x, y: POOL.y1 + 2 });
+    }
+    for (let y = POOL.y0 - 1; y <= POOL.y1 + 1; y++) {
+      deckSpots.push({ x: POOL.x0 - 2, y }, { x: POOL.x1 + 2, y });
+    }
+    const deckClear = (x, y) => tileOf(x, y) === T.DECK;
+    const placeOn = (item, n) => {
+      if (!item) return;
+      for (let k = 0, guard = 0; k < n && guard < 400; guard++) {
+        const s = deckSpots[(rng() * deckSpots.length) | 0];
+        if (!fits(s.x, s.y, item.w, deckClear)) continue;
+        props.push({ src: item.src, tx: s.x, ty: s.y, w: item.w, h: item.h });
+        occupy(s.x, s.y, item.w);
+        k++;
+      }
+    };
+    if (decor.flag && decor.flag.length) {
+      for (let i = 0; i < 4; i++) placeOn(decor.flag[(rng() * decor.flag.length) | 0], 1);
+    }
+    placeOn(decor.anchor, 2);
+    placeOn(decor.barrels, 4);
+  }
+
+  return { width: MAP_W, height: MAP_H, tiles, blocked, props };
 }
 
 // --- Queries ---------------------------------------------------------------
@@ -191,7 +336,8 @@ export function tileAt(map, x, y) {
 }
 
 export function canWalk(map, x, y) {
-  return isPassable(tileAt(map, x, y));
+  if (!isPassable(tileAt(map, x, y))) return false;
+  return !(map.blocked && map.blocked.has(y * map.width + x));
 }
 
 // Flood fill from a start tile. NPCs and the player may only occupy tiles in

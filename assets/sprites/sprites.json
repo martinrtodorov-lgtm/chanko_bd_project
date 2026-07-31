@@ -15,9 +15,7 @@
       ],
       "left": [
         "assets/sprites/player/walk-left-0.png",
-        "assets/sprites/player/walk-left-1.png",
-        "assets/sprites/player/walk-left-2.png",
-        "assets/sprites/player/walk-left-3.png"
+        "assets/sprites/player/walk-left-2.png"
       ],
       "right": [
         "assets/sprites/player/walk-right-0.png",

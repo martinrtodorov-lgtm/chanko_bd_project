@@ -1,0 +1,373 @@
+{
+  "house": [
+    {
+      "src": "assets/decor/house/house-00.png",
+      "w": 42,
+      "h": 59
+    },
+    {
+      "src": "assets/decor/house/house-01.png",
+      "w": 16,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/house/house-02.png",
+      "w": 16,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/house/house-03.png",
+      "w": 42,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/house/house-04.png",
+      "w": 41,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/house/house-05.png",
+      "w": 23,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/house/house-06.png",
+      "w": 22,
+      "h": 38
+    },
+    {
+      "src": "assets/decor/house/house-07.png",
+      "w": 17,
+      "h": 32
+    },
+    {
+      "src": "assets/decor/house/house-08.png",
+      "w": 24,
+      "h": 51
+    },
+    {
+      "src": "assets/decor/house/house-09.png",
+      "w": 80,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/house/house-10.png",
+      "w": 38,
+      "h": 18
+    },
+    {
+      "src": "assets/decor/house/house-11.png",
+      "w": 19,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/house/house-12.png",
+      "w": 19,
+      "h": 18
+    },
+    {
+      "src": "assets/decor/house/house-13.png",
+      "w": 17,
+      "h": 18
+    },
+    {
+      "src": "assets/decor/house/house-14.png",
+      "w": 42,
+      "h": 32
+    },
+    {
+      "src": "assets/decor/house/house-15.png",
+      "w": 18,
+      "h": 14
+    },
+    {
+      "src": "assets/decor/house/house-16.png",
+      "w": 16,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/house/house-17.png",
+      "w": 16,
+      "h": 18
+    },
+    {
+      "src": "assets/decor/house/house-18.png",
+      "w": 15,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/house/house-19.png",
+      "w": 16,
+      "h": 26
+    }
+  ],
+  "tavern": [
+    {
+      "src": "assets/decor/tavern/tavern-00.png",
+      "w": 51,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-01.png",
+      "w": 52,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-02.png",
+      "w": 158,
+      "h": 87
+    },
+    {
+      "src": "assets/decor/tavern/tavern-03.png",
+      "w": 42,
+      "h": 59
+    },
+    {
+      "src": "assets/decor/tavern/tavern-04.png",
+      "w": 51,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-05.png",
+      "w": 52,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-06.png",
+      "w": 42,
+      "h": 32
+    },
+    {
+      "src": "assets/decor/tavern/tavern-07.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-08.png",
+      "w": 29,
+      "h": 41
+    },
+    {
+      "src": "assets/decor/tavern/tavern-09.png",
+      "w": 25,
+      "h": 34
+    },
+    {
+      "src": "assets/decor/tavern/tavern-10.png",
+      "w": 88,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tavern/tavern-11.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-12.png",
+      "w": 51,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/tavern/tavern-13.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-14.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-15.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-16.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-17.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-18.png",
+      "w": 39,
+      "h": 22
+    },
+    {
+      "src": "assets/decor/tavern/tavern-19.png",
+      "w": 15,
+      "h": 15
+    },
+    {
+      "src": "assets/decor/tavern/tavern-20.png",
+      "w": 21,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-21.png",
+      "w": 21,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-22.png",
+      "w": 16,
+      "h": 26
+    },
+    {
+      "src": "assets/decor/tavern/tavern-23.png",
+      "w": 16,
+      "h": 26
+    },
+    {
+      "src": "assets/decor/tavern/tavern-24.png",
+      "w": 16,
+      "h": 26
+    },
+    {
+      "src": "assets/decor/tavern/tavern-25.png",
+      "w": 84,
+      "h": 48
+    },
+    {
+      "src": "assets/decor/tavern/tavern-26.png",
+      "w": 14,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-27.png",
+      "w": 28,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/tavern/tavern-28.png",
+      "w": 14,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-29.png",
+      "w": 28,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/tavern/tavern-30.png",
+      "w": 14,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-31.png",
+      "w": 28,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/tavern/tavern-32.png",
+      "w": 14,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-33.png",
+      "w": 28,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/tavern/tavern-34.png",
+      "w": 25,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/tavern/tavern-35.png",
+      "w": 25,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/tavern/tavern-36.png",
+      "w": 25,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/tavern/tavern-37.png",
+      "w": 25,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/tavern/tavern-38.png",
+      "w": 15,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-39.png",
+      "w": 15,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/tavern/tavern-40.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-41.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-42.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-43.png",
+      "w": 52,
+      "h": 31
+    }
+  ],
+  "flag": [
+    {
+      "src": "assets/decor/pool/flag-00.png",
+      "w": 28,
+      "h": 56
+    },
+    {
+      "src": "assets/decor/pool/flag-01.png",
+      "w": 28,
+      "h": 56
+    },
+    {
+      "src": "assets/decor/pool/flag-02.png",
+      "w": 28,
+      "h": 56
+    },
+    {
+      "src": "assets/decor/pool/flag-03.png",
+      "w": 28,
+      "h": 56
+    },
+    {
+      "src": "assets/decor/pool/flag-04.png",
+      "w": 28,
+      "h": 56
+    },
+    {
+      "src": "assets/decor/pool/flag-05.png",
+      "w": 28,
+      "h": 56
+    }
+  ],
+  "ship": {
+    "src": "assets/decor/pool/ship-00.png",
+    "w": 322,
+    "h": 273
+  },
+  "anchor": {
+    "src": "assets/decor/pool/anchor-00.png",
+    "w": 24,
+    "h": 20
+  },
+  "barrels": {
+    "src": "assets/decor/pool/barrels-00.png",
+    "w": 46,
+    "h": 35
+  }
+}

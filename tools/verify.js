@@ -6,7 +6,8 @@ import {
   createState, WARLOCK_TILE, PLAYER_TEAM_CAP, ENEMY_TEAM_CAP,
 } from "../js/state.js";
 import {
-  generateMap, canWalk, computeReachable, SPAWN_ANCHOR, MAP_W, POOL, HOUSE, HOUSE_XS, T, tileAt,
+  generateMap, canWalk, computeReachable, SPAWN_ANCHOR, MAP_W, POOL, HOUSE, HOUSE_XS,
+  TAVERN, T, tileAt,
 } from "../js/map.js";
 
 let fails = 0;
@@ -43,6 +44,16 @@ for (const n of npcs) refs.add(n["npc-portrait-reference"]);
 refs.add(warlock["npc-portrait-reference"]);
 refs.add("assets/ui/start_screen.jpg");
 
+const decor = fs.existsSync("assets/decor/decor.json")
+  ? JSON.parse(fs.readFileSync("assets/decor/decor.json", "utf8"))
+  : null;
+if (decor) {
+  for (const v of Object.values(decor)) {
+    if (Array.isArray(v)) v.forEach((it) => refs.add(it.src));
+    else if (v && v.src) refs.add(v.src);
+  }
+}
+
 const missing = [...refs].filter((r) => !existsExact(r));
 if (missing.length) missing.forEach((m) => fail(`missing or wrong case: ${m}`));
 else ok(`all ${refs.size} asset references resolve with exact case`);
@@ -75,8 +86,9 @@ else ok("warlock excluded from the assignable roster");
 
 // --- Spawning --------------------------------------------------------------
 
-const map = generateMap();
+const map = generateMap(undefined, decor);
 const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
+if (decor) ok(`world furnished with ${map.props.length} props, ${map.blocked.size} tiles reserved`);
 
 if (!canWalk(map, WARLOCK_TILE.x, WARLOCK_TILE.y)) fail("warlock tile is impassable");
 else if (!reach[WARLOCK_TILE.y * MAP_W + WARLOCK_TILE.x]) fail("warlock tile is unreachable");
@@ -87,7 +99,7 @@ else ok("player spawns on a walkable tile at the gate");
 
 let bad = 0, collisions = 0;
 for (let run = 0; run < 40; run++) {
-  const s = createState("pirate", npcs);
+  const s = createState("pirate", npcs, map);
   const seen = new Set();
   for (const [label, pos] of Object.entries(s.npcs)) {
     if (!canWalk(map, pos.x, pos.y) || !reach[pos.y * MAP_W + pos.x]) bad++;
@@ -131,6 +143,39 @@ if (doorless) fail(`${doorless} house(s) have no doorway`);
 else ok(`all ${HOUSE_XS.length} houses have a doorway on the south wall`);
 if (sealed) fail(`${sealed} house interior(s) are not reachable through the door`);
 else ok("every house interior is reachable from outside");
+
+// Tavern must be enterable too, and furniture must not seal any interior.
+let tavernDoors = 0;
+for (let x = TAVERN.x0; x <= TAVERN.x1; x++) {
+  if (tileAt(map, x, TAVERN.y1) === T.DOOR) tavernDoors++;
+}
+if (!tavernDoors) fail("tavern has no doorway");
+else ok(`tavern has a ${tavernDoors}-tile doorway`);
+
+const countReachableFloor = (b) => {
+  let total = 0, got = 0;
+  for (let y = b.y0 + 1; y < b.y1; y++) {
+    for (let x = b.x0 + 1; x < b.x1; x++) {
+      if (tileAt(map, x, y) !== T.FLOOR) continue;
+      total++;
+      if (reach[y * MAP_W + x]) got++;
+    }
+  }
+  return { total, got };
+};
+
+const tv = countReachableFloor(TAVERN);
+if (tv.got === 0) fail("tavern interior is completely sealed off");
+else if (tv.got < tv.total * 0.6) fail(`only ${tv.got}/${tv.total} tavern floor tiles reachable — furniture is blocking it`);
+else ok(`tavern interior ${tv.got}/${tv.total} floor tiles reachable`);
+
+let tightHouse = 0;
+for (const hx of HOUSE_XS) {
+  const r = countReachableFloor({ x0: hx, y0: HOUSE.y0, x1: hx + HOUSE.w, y1: HOUSE.y1 });
+  if (r.got < r.total * 0.6) tightHouse++;
+}
+if (tightHouse) fail(`${tightHouse} house(s) too cluttered to walk around in`);
+else ok("all house interiors remain walkable after furnishing");
 
 // --- Pool geometry ---------------------------------------------------------
 

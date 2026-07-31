@@ -72,14 +72,23 @@ impassable except:
 
 Inside the villa:
 
-- **Tavern** — large building, upper half.
-- **Pool** — right of the tavern, impassable.
-- **Four small houses** — lower half, each with a green lawn below it, not
-  touching the fence. No fences between houses; occasional impassable small
-  trees separate them.
+- **Tavern** — large building, upper half. Walled, with a 3-tile doorway on its
+  south side; enterable, like the houses.
+- **Pool** — right of the tavern, impassable, ringed by a paved deck. A ship
+  floats at its centre; pirate flags, anchors and barrels sit on the deck.
+- **Four small houses** — lower half, each walled with a 2-tile doorway on the
+  south side, an interior floor, and a green lawn below not touching the fence.
+  No fences between houses; occasional impassable small trees separate them.
 
-Terrain is generated procedurally in code and drawn with canvas primitives —
-there is no tile artwork.
+Terrain is generated procedurally in code and drawn with canvas primitives.
+Interiors are furnished from `assets/decor/decor.json`, chosen at random from
+the supplied tilesets: large pieces are placed against walls, small clutter
+anywhere, and the doorway plus the strip in front of it is always left clear.
+Furniture reserves the tiles it stands on, and `tools/verify.js` asserts every
+interior stays reachable.
+
+Single-tile artwork can be dropped at `assets/tiles/tile-{floor,wall,door,deck}.png`
+(32×32) to replace the procedural look; absent files simply fall back.
 
 ---
 

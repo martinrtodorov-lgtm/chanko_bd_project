@@ -169,8 +169,22 @@ function drawSprite(ctx, img, cx, footY, height) {
   ctx.drawImage(img, Math.round(cx - w / 2), Math.round(footY - height), w, height);
 }
 
-export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel) {
+export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
   const list = [];
+
+  // Static props: furniture indoors, ship and dockside clutter by the pool.
+  if (map && map.props) {
+    for (const p of map.props) {
+      list.push({
+        prop: true,
+        img: assets.images[p.src],
+        cx: (p.tx + 0.5) * TILE,
+        footY: p.float ? (p.ty + 0.5) * TILE + p.h / 2 : (p.ty + 1) * TILE,
+        w: p.w,
+        h: p.h,
+      });
+    }
+  }
 
   for (const [label, pos] of Object.entries(state.npcs)) {
     list.push({
@@ -202,7 +216,15 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel) {
 
   for (const e of list) {
     const sx = e.cx - cam.x, sy = e.footY - cam.y;
-    if (sx < -120 || sy < -160 || sx > VIEW_W + 120 || sy > VIEW_H + 160) continue;
+    const pad = e.prop ? Math.max(e.w, e.h) : 160;
+    if (sx < -pad || sy < -pad || sx > VIEW_W + pad || sy > VIEW_H + pad) continue;
+
+    if (e.prop) {
+      if (e.img) {
+        ctx.drawImage(e.img, Math.round(sx - e.w / 2), Math.round(sy - e.h), e.w, e.h);
+      }
+      continue;
+    }
 
     // Soft contact shadow
     ctx.save();

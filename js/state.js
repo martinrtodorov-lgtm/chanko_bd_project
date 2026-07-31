@@ -17,8 +17,7 @@ export const DC_WARLOCK_HINT = 15;
 // findable landmark, since he gates the win condition.
 export const WARLOCK_TILE = { x: 108, y: 62 };
 
-export function createState(faction, npcData) {
-  const map = generateMap();
+export function createState(faction, npcData, map = generateMap()) {
   const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
 
   // Collect every reachable tile, then deal out distinct spawn points.
