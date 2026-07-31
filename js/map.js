@@ -25,10 +25,11 @@ export const T = {
   WALL: 13,
   FLOOR: 14,
   DOOR: 15,
+  TREE_SPRITE: 16,   // blocks like a tree, but the canopy is drawn as a sprite
 };
 
 const IMPASSABLE = new Set([
-  T.VOID, T.WATER, T.TREE, T.FENCE, T.TAVERN, T.POOL, T.HOUSE, T.WALL,
+  T.VOID, T.WATER, T.TREE, T.FENCE, T.TAVERN, T.POOL, T.HOUSE, T.WALL, T.TREE_SPRITE,
 ]);
 export const isPassable = (t) => !IMPASSABLE.has(t);
 
@@ -49,6 +50,7 @@ export const PALETTE = {
   [T.WALL]: "#8d5a38",
   [T.FLOOR]: "#a8845c",
   [T.DOOR]: "#4a2f19",
+  [T.TREE_SPRITE]: "#3d6b38",
 };
 
 // --- Region boundaries -----------------------------------------------------
@@ -222,6 +224,7 @@ export function generateMap(seed = 20260731, decor = null) {
   };
 
   const LARGE_AREA = 1500;   // roughly a bed, table, wardrobe or bar counter
+  const TREE_SPRITE_SHARE = 0.6;
 
   /**
    * Furnish a building. Large pieces are pushed against the walls the way real
@@ -252,6 +255,12 @@ export function generateMap(seed = 20260731, decor = null) {
       perimeter.push({ x: inner.x0 + 1, y }, { x: inner.x1 - 1, y });
     }
 
+    // A prop is drawn upwards from the bottom of its tile. Anything taller than
+    // the space above it would poke out through the roof, so keep the sprite
+    // inside the outer wall line.
+    const ceiling = building.y0 * TILE;
+    const standsInside = (ty, h) => (ty + 1) * TILE - h >= ceiling;
+
     const scatter = (pool, count, spots) => {
       if (!pool.length) return;
       let placed = 0;
@@ -265,6 +274,7 @@ export function generateMap(seed = 20260731, decor = null) {
           tx = inner.x0 + ((rng() * (inner.x1 - inner.x0 + 1)) | 0);
           ty = inner.y0 + ((rng() * (inner.y1 - inner.y0 + 1)) | 0);
         }
+        if (!standsInside(ty, item.h)) continue;
         if (!fits(tx, ty, item.w, isClear)) continue;
         props.push({ src: item.src, tx, ty, w: item.w, h: item.h });
         occupy(tx, ty, item.w);
@@ -277,6 +287,21 @@ export function generateMap(seed = 20260731, decor = null) {
   };
 
   if (decor) {
+    // Swap a share of the drawn trees for sprite trees, keeping both kinds on
+    // the map so the forest and the villa grounds read as mixed woodland.
+    if (decor.tree && decor.tree.length) {
+      for (let y = 0; y < MAP_H; y++) {
+        for (let x = 0; x < MAP_W; x++) {
+          if (tileOf(x, y) !== T.TREE) continue;
+          if (rng() >= TREE_SPRITE_SHARE) continue;
+          const item = decor.tree[(rng() * decor.tree.length) | 0];
+          set(x, y, T.TREE_SPRITE);
+          // No occupy() — the tile itself is already impassable.
+          props.push({ src: item.src, tx: x, ty: y, w: item.w, h: item.h });
+        }
+      }
+    }
+
     for (const hx of HOUSE_XS) {
       const door0 = hx + HOUSE.doorOffset, door1 = door0 + HOUSE.doorW - 1;
       furnish(

@@ -311,23 +311,70 @@ export function showMessage(title, text) {
 
 // --- Information screen ----------------------------------------------------
 
+/** One block per page, paged left/right with the arrow keys or the controls. */
 export function showInfo(info) {
   return new Promise((resolve) => {
+    const pages = info.blocks;
+    let page = 0;
+
     const layer = panel("layer-info");
-    const blocks = info.blocks
-      .map((b) => `<section><h3>${b.heading}</h3><p>${b.text}</p></section>`)
-      .join("");
     layer.innerHTML = `
       <div class="dialog dialog-info">
-        <h2>${info.title}</h2>
-        <div class="info-blocks">${blocks}</div>
-        <button type="button" class="menu-button" id="info-close">Close</button>
+        <header class="info-head">
+          <p class="info-kicker">${info.title}</p>
+          <h2 class="info-title"></h2>
+        </header>
+        <div class="info-page"><p class="info-text"></p></div>
+        <nav class="info-nav">
+          <button type="button" class="pager" data-act="prev" aria-label="Previous page">◀</button>
+          <ol class="info-dots"></ol>
+          <button type="button" class="pager" data-act="next" aria-label="Next page">▶</button>
+        </nav>
+        <footer class="info-foot">
+          <span class="muted">← → to turn pages · I or Esc to close</span>
+          <button type="button" class="menu-button" id="info-close">Close</button>
+        </footer>
       </div>`;
+
+    const titleEl = layer.querySelector(".info-title");
+    const textEl = layer.querySelector(".info-text");
+    const dotsEl = layer.querySelector(".info-dots");
+    const prevBtn = layer.querySelector('[data-act="prev"]');
+    const nextBtn = layer.querySelector('[data-act="next"]');
+
+    const dots = pages.map((_, i) => {
+      const li = document.createElement("li");
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "dot";
+      b.textContent = String(i + 1);
+      b.addEventListener("click", () => go(i));
+      li.appendChild(b);
+      dotsEl.appendChild(li);
+      return b;
+    });
+
+    function go(i) {
+      page = Math.max(0, Math.min(pages.length - 1, i));
+      const b = pages[page];
+      titleEl.textContent = b.heading;
+      textEl.textContent = b.text;
+      dots.forEach((d, k) => d.classList.toggle("is-current", k === page));
+      prevBtn.disabled = page === 0;
+      nextBtn.disabled = page === pages.length - 1;
+    }
+
+    prevBtn.addEventListener("click", () => go(page - 1));
+    nextBtn.addEventListener("click", () => go(page + 1));
+    go(0);
 
     const close = mount(layer);
     const finish = () => { window.removeEventListener("keydown", onKey, true); close(); resolve(); };
     const onKey = (e) => {
-      if (e.key === "i" || e.key === "I" || e.key === "Escape") { e.preventDefault(); finish(); }
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); go(page + 1); }
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); go(page - 1); }
+      else if (e.key >= "1" && e.key <= String(pages.length)) { e.preventDefault(); go(+e.key - 1); }
+      else if (e.key === "i" || e.key === "I" || e.key === "Escape") { e.preventDefault(); finish(); }
     };
     window.addEventListener("keydown", onKey, true);
     layer.querySelector("#info-close").addEventListener("click", finish);

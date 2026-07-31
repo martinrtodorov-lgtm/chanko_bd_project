@@ -80,6 +80,10 @@ Inside the villa:
   south side, an interior floor, and a green lawn below not touching the fence.
   No fences between houses; occasional impassable small trees separate them.
 
+Trees come in two kinds, deliberately mixed: the original canvas-drawn canopies
+and sprite trees picked at random from the supplied tree tileset. Roughly 60% of
+tree tiles use a sprite. Both block movement identically.
+
 Terrain is generated procedurally in code and drawn with canvas primitives.
 Interiors are furnished from `assets/decor/decor.json`, chosen at random from
 the supplied tilesets: large pieces are placed against walls, small clutter
@@ -120,8 +124,16 @@ Charisma     + 3
 
 ## 6. Information screen (`I`)
 
-Popup with **5 hard-coded text blocks** explaining how the game works. Content
-supplied later; the skeleton ships with placeholders.
+Five text blocks explaining how the game works, presented **one per page**.
+Each page shows its own heading and body. Navigation:
+
+- `←` / `→` (or `↑` / `↓`) to turn pages
+- number keys `1`–`5` to jump directly
+- clickable numbered dots and prev/next controls
+- `I` or `Esc` to close
+
+Content comes from `data/info.json`; the page count follows the number of
+blocks in that file.
 
 ---
 

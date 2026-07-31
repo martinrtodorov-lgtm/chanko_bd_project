@@ -72,6 +72,15 @@ function drawTile(ctx, map, tx, ty, sx, sy, art) {
       ctx.fillRect(sx + ((n * 22) | 0), sy + ((hash(ty, tx) * 22) | 0), 5, 4);
       break;
     }
+    case T.TREE_SPRITE: {
+      // Bare ground; the canopy is drawn later as a depth-sorted sprite.
+      const ground = tileAt(map, tx, ty + 1) === T.FOREST ? PALETTE[T.FOREST] : PALETTE[T.GRASS];
+      ctx.fillStyle = ground;
+      ctx.fillRect(sx, sy, TILE, TILE);
+      ctx.fillStyle = shade(ground, n > 0.5 ? 12 : -10);
+      ctx.fillRect(sx + ((n * 24) | 0), sy + ((hash(ty, tx) * 24) | 0), 3, 5);
+      break;
+    }
     case T.TREE: {
       // Trunk and canopy sitting on whatever the surrounding ground is
       const ground = tileAt(map, tx, ty + 1) === T.FOREST ? PALETTE[T.FOREST] : PALETTE[T.GRASS];
@@ -172,17 +181,16 @@ function drawSprite(ctx, img, cx, footY, height) {
 export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
   const list = [];
 
-  // Static props: furniture indoors, ship and dockside clutter by the pool.
+  // Static props: trees, furniture indoors, ship and dockside clutter. Culled
+  // against the camera before the sort, since the world holds over a thousand.
   if (map && map.props) {
+    const left = cam.x - 160, right = cam.x + VIEW_W + 160;
+    const top = cam.y - 220, bottom = cam.y + VIEW_H + 220;
     for (const p of map.props) {
-      list.push({
-        prop: true,
-        img: assets.images[p.src],
-        cx: (p.tx + 0.5) * TILE,
-        footY: p.float ? (p.ty + 0.5) * TILE + p.h / 2 : (p.ty + 1) * TILE,
-        w: p.w,
-        h: p.h,
-      });
+      const cx = (p.tx + 0.5) * TILE;
+      const footY = p.float ? (p.ty + 0.5) * TILE + p.h / 2 : (p.ty + 1) * TILE;
+      if (cx < left || cx > right || footY < top || footY > bottom) continue;
+      list.push({ prop: true, img: assets.images[p.src], cx, footY, w: p.w, h: p.h });
     }
   }
 

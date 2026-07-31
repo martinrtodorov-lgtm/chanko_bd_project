@@ -85,14 +85,19 @@ const manifest = [];
 boxes.forEach((b, i) => {
   const w = b.maxX - b.minX + 1, h = b.maxY - b.minY + 1;
   const out = new PNG({ width: w, height: h });
+  let opaque = 0;
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const si = ((b.minY + y) * W + (b.minX + x)) * 4, di = (y * w + x) * 4;
     out.data[di] = data[si]; out.data[di + 1] = data[si + 1];
     out.data[di + 2] = data[si + 2]; out.data[di + 3] = data[si + 3];
+    if (data[si + 3] > 24) opaque++;
   }
   const name = `${base}-${String(i).padStart(2, "0")}.png`;
   fs.writeFileSync(path.join(outDir, name), PNG.sync.write(out));
-  manifest.push({ name, w, h });
+  // `fill` is the opaque fraction of the bounding box. A single object is
+  // mostly solid; a cluster of separate items that got merged is mostly gaps,
+  // which lets the packaging step drop it.
+  manifest.push({ name, w, h, fill: +(opaque / (w * h)).toFixed(3) });
 });
 
 fs.writeFileSync(path.join(outDir, `${base}-manifest.json`), JSON.stringify(manifest, null, 2));

@@ -99,6 +99,71 @@
       "src": "assets/decor/house/house-19.png",
       "w": 16,
       "h": 26
+    },
+    {
+      "src": "assets/decor/house/house-20.png",
+      "w": 43,
+      "h": 59
+    },
+    {
+      "src": "assets/decor/house/house-21.png",
+      "w": 23,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/house/house-22.png",
+      "w": 19,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/house/house-23.png",
+      "w": 16,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/house/house-24.png",
+      "w": 26,
+      "h": 38
+    },
+    {
+      "src": "assets/decor/house/house-25.png",
+      "w": 26,
+      "h": 32
+    },
+    {
+      "src": "assets/decor/house/house-26.png",
+      "w": 26,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/house/house-27.png",
+      "w": 32,
+      "h": 24
+    },
+    {
+      "src": "assets/decor/house/house-28.png",
+      "w": 189,
+      "h": 287
+    },
+    {
+      "src": "assets/decor/house/house-29.png",
+      "w": 16,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/house/house-30.png",
+      "w": 16,
+      "h": 17
+    },
+    {
+      "src": "assets/decor/house/house-31.png",
+      "w": 14,
+      "h": 16
+    },
+    {
+      "src": "assets/decor/house/house-32.png",
+      "w": 14,
+      "h": 15
     }
   ],
   "tavern": [
@@ -321,6 +386,583 @@
       "src": "assets/decor/tavern/tavern-43.png",
       "w": 52,
       "h": 31
+    }
+  ],
+  "tree": [
+    {
+      "src": "assets/decor/tree/tree-00.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-01.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-02.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-03.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-04.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-05.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-06.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-07.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-08.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-09.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-10.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-11.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-12.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-13.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-14.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-15.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-16.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-17.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-18.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-19.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-20.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-21.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-22.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-23.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-24.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-25.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-26.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-27.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-28.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-29.png",
+      "w": 63,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-30.png",
+      "w": 52,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-31.png",
+      "w": 74,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-32.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-33.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-34.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-35.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-36.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-37.png",
+      "w": 63,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-38.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-39.png",
+      "w": 59,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-40.png",
+      "w": 55,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-41.png",
+      "w": 40,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-42.png",
+      "w": 52,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-43.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-44.png",
+      "w": 43,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-45.png",
+      "w": 63,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-46.png",
+      "w": 62,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-47.png",
+      "w": 73,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-48.png",
+      "w": 54,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-49.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-50.png",
+      "w": 58,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-51.png",
+      "w": 43,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-52.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-53.png",
+      "w": 41,
+      "h": 43
+    },
+    {
+      "src": "assets/decor/tree/tree-54.png",
+      "w": 63,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-55.png",
+      "w": 54,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-56.png",
+      "w": 61,
+      "h": 75
+    },
+    {
+      "src": "assets/decor/tree/tree-57.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-58.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-59.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-60.png",
+      "w": 43,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-61.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-62.png",
+      "w": 41,
+      "h": 44
+    },
+    {
+      "src": "assets/decor/tree/tree-63.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-64.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-65.png",
+      "w": 73,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-66.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-67.png",
+      "w": 57,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-68.png",
+      "w": 41,
+      "h": 48
+    },
+    {
+      "src": "assets/decor/tree/tree-69.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-70.png",
+      "w": 30,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-71.png",
+      "w": 41,
+      "h": 45
+    },
+    {
+      "src": "assets/decor/tree/tree-72.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-73.png",
+      "w": 62,
+      "h": 75
+    },
+    {
+      "src": "assets/decor/tree/tree-74.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-75.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-76.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-77.png",
+      "w": 58,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-78.png",
+      "w": 39,
+      "h": 48
+    },
+    {
+      "src": "assets/decor/tree/tree-79.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-80.png",
+      "w": 41,
+      "h": 44
+    },
+    {
+      "src": "assets/decor/tree/tree-81.png",
+      "w": 62,
+      "h": 78
+    },
+    {
+      "src": "assets/decor/tree/tree-82.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-83.png",
+      "w": 62,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-84.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-85.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-86.png",
+      "w": 59,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-87.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-88.png",
+      "w": 30,
+      "h": 41
+    },
+    {
+      "src": "assets/decor/tree/tree-89.png",
+      "w": 41,
+      "h": 44
+    },
+    {
+      "src": "assets/decor/tree/tree-90.png",
+      "w": 63,
+      "h": 238
+    },
+    {
+      "src": "assets/decor/tree/tree-91.png",
+      "w": 63,
+      "h": 75
+    },
+    {
+      "src": "assets/decor/tree/tree-92.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-93.png",
+      "w": 58,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-94.png",
+      "w": 56,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-95.png",
+      "w": 40,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-96.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-97.png",
+      "w": 30,
+      "h": 41
+    },
+    {
+      "src": "assets/decor/tree/tree-98.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-99.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-100.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-101.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-102.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-103.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-104.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-105.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-106.png",
+      "w": 41,
+      "h": 42
+    },
+    {
+      "src": "assets/decor/tree/tree-107.png",
+      "w": 53,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-108.png",
+      "w": 61,
+      "h": 73
+    },
+    {
+      "src": "assets/decor/tree/tree-109.png",
+      "w": 51,
+      "h": 64
+    },
+    {
+      "src": "assets/decor/tree/tree-110.png",
+      "w": 72,
+      "h": 77
+    },
+    {
+      "src": "assets/decor/tree/tree-111.png",
+      "w": 57,
+      "h": 65
+    },
+    {
+      "src": "assets/decor/tree/tree-112.png",
+      "w": 39,
+      "h": 47
+    },
+    {
+      "src": "assets/decor/tree/tree-113.png",
+      "w": 30,
+      "h": 40
+    },
+    {
+      "src": "assets/decor/tree/tree-114.png",
+      "w": 41,
+      "h": 43
     }
   ],
   "flag": [

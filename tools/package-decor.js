@@ -2,46 +2,56 @@
 // game loads. Run after tools/atlas.js.
 import fs from "fs";
 import path from "path";
-import { PNG } from "pngjs";
 
 const SRC = "tools/preview/atlas";
 const DST = "assets/decor";
 
+// One catalogue key may draw on several atlases.
 const GROUPS = [
-  { key: "house", from: "interiorhouse", to: "house", minSide: 14 },
-  { key: "tavern", from: "interiortavern", to: "tavern", minSide: 14 },
-  { key: "flag", from: "flag", to: "pool", minSide: 10 },
-  { key: "ship", from: "ship", to: "pool", minSide: 40, single: true },
-  { key: "anchor", from: "anchor", to: "pool", minSide: 8, single: true },
-  { key: "barrels", from: "barrels", to: "pool", minSide: 8, single: true },
+  { key: "house", to: "house", from: ["interiorhouse", "houseinterioradditions"], minSide: 14, minFill: 0.3 },
+  { key: "tavern", to: "tavern", from: ["interiortavern"], minSide: 14, minFill: 0.25 },
+  { key: "tree", to: "tree", from: ["trees"], minSide: 20, minFill: 0.3 },
+  { key: "flag", to: "pool", from: ["flag"], minSide: 10, minFill: 0.15 },
+  { key: "ship", to: "pool", from: ["ship"], minSide: 40, minFill: 0.1, single: true },
+  { key: "anchor", to: "pool", from: ["anchor"], minSide: 8, minFill: 0.1, single: true },
+  { key: "barrels", to: "pool", from: ["barrels"], minSide: 8, minFill: 0.1, single: true },
 ];
 
 const catalogue = {};
+let dropped = 0;
 
 for (const g of GROUPS) {
-  const dir = path.join(SRC, g.from);
-  const files = fs.readdirSync(dir).filter((f) => /-\d\d\.png$/.test(f)).sort();
   const outDir = path.join(DST, g.to);
   fs.mkdirSync(outDir, { recursive: true });
-
   const items = [];
-  for (const f of files) {
-    const png = PNG.sync.read(fs.readFileSync(path.join(dir, f)));
-    if (png.width < g.minSide || png.height < g.minSide) continue;
-    const name = `${g.key}-${String(items.length).padStart(2, "0")}.png`;
-    fs.copyFileSync(path.join(dir, f), path.join(outDir, name));
-    items.push({ src: `${DST}/${g.to}/${name}`, w: png.width, h: png.height });
+
+  for (const atlas of g.from) {
+    const dir = path.join(SRC, atlas);
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(dir, `${atlas.toLowerCase()}-manifest.json`), "utf8")
+    );
+    for (const m of manifest) {
+      if (m.w < g.minSide || m.h < g.minSide) { dropped++; continue; }
+      if (m.fill !== undefined && m.fill < g.minFill) { dropped++; continue; }
+      const name = `${g.key}-${String(items.length).padStart(2, "0")}.png`;
+      fs.copyFileSync(path.join(dir, m.name), path.join(outDir, name));
+      items.push({ src: `${DST}/${g.to}/${name}`, w: m.w, h: m.h });
+    }
   }
 
   catalogue[g.key] = g.single ? items[0] : items;
-  console.log(`${g.key.padEnd(8)} ${g.single ? 1 : items.length} item(s)`);
+  console.log(`${g.key.padEnd(8)} ${g.single ? 1 : items.length} item(s)  from ${g.from.join(", ")}`);
 }
 
 fs.writeFileSync(`${DST}/decor.json`, JSON.stringify(catalogue, null, 2));
 
 const total = Object.values(catalogue)
   .reduce((n, v) => n + (Array.isArray(v) ? v.length : 1), 0);
-const bytes = fs.readdirSync(DST, { recursive: true })
-  .filter((f) => f.endsWith(".png"))
-  .reduce((n, f) => n + fs.statSync(path.join(DST, f)).size, 0);
-console.log(`\n${total} decor items, ${(bytes / 1024).toFixed(0)} KB total`);
+let bytes = 0;
+for (const d of fs.readdirSync(DST, { withFileTypes: true })) {
+  if (!d.isDirectory()) continue;
+  for (const f of fs.readdirSync(path.join(DST, d.name))) {
+    bytes += fs.statSync(path.join(DST, d.name, f)).size;
+  }
+}
+console.log(`\n${total} decor items, ${(bytes / 1024).toFixed(0)} KB, ${dropped} fragments dropped`);
