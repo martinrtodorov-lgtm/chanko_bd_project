@@ -1,10 +1,25 @@
 {
   "title": "How this game works",
   "blocks": [
-    { "heading": "PLACEHOLDER Block One", "text": "PLACEHOLDER text for the first information block." },
-    { "heading": "PLACEHOLDER Block Two", "text": "PLACEHOLDER text for the second information block." },
-    { "heading": "PLACEHOLDER Block Three", "text": "PLACEHOLDER text for the third information block." },
-    { "heading": "PLACEHOLDER Block Four", "text": "PLACEHOLDER text for the fourth information block." },
-    { "heading": "PLACEHOLDER Block Five", "text": "PLACEHOLDER text for the fifth information block." }
+    {
+      "heading": "How to win the game",
+      "text": "The goal of this game is for Chanko to go through all 7 trials of the Warlock successfully and gather 100 gold coins. Along the way, he will need to make allies and strategize under pressure.\n\nHow to use your D20: Some NPCs will require you to make a DC check to achieve a certain outcome. To sweet talk someone into giving you a quest, it depends on that person's allegience on how difficult this might be. You can also use the dice to do any other check with a certain NPC person as long as you both agree on an action and an equivalent DC. You can only roll checks for mental stats, everything physical (e.g. pickpocketing, lockpicking, athletics) needs to be done by you physicaly."
+    },
+    {
+      "heading": "Teams",
+      "text": "When you start the game, you get to allocate the people between two teams, having to keep at least 8 people in a team. Once you do so, every time you decide to redistribute teams and press T, you need to pay the Warlock 1 gold coin in person.\n\nWhen two people change teams, they should also exchange their class gear. If a flag bearer is exchanged with another person, a new flag bearer is chosen by the team. It is powerful to change people to different teams, as obtaining their initial favor is easier (DC13 vs DC18 for opposting fractions) and once you do, you can take their personal quest. Changing a person to a different fraction afterward does not remove your quest progression and you can still complete it.\n\nPeople from your team will generally be more collaborative with you and can more easily agree on lending you gold or doing you a favor in a challenge. People from the opposing team will generally be hostile and put unrealistically high DCs on your request, refusing to lend you gold."
+    },
+    {
+      "heading": "Quests and Gold",
+      "text": "The warlock offers 7 trials, which need to be completed consequitively to win the game. Apart from him, there are 15 other NPC characters, each of them having a personal quest of their own. Winning these quests is crucial to winning the game, as once you complete their person quest, they will be your allies for life and will give you their coins without hesitation. Before that point, you need to play as if you are gaining the gold coins for your own personal cause and do not want to share them freely."
+    },
+    {
+      "heading": "The Warlock's trials, Modifiers",
+      "text": "You will be prompted in real life when it is time to take a trial. Beforehand, you can attempt an INT15 check to find out a clue regarding what the trial's nature would be, allowing you to prepare your strategy. Once you accept the trial in game, the actual event will also start in real life. All of them have a limited time duration.\n\nApart from Chanko's mental stats, there are other factors that boost your final roll such as certain wearable items and flags. For items, you will be told the effect of the item upon obtaining it. For flags, if you are at least 2 meters from your fraction's flag, you have +2 on any roll. If you are at least 2 meters from your opposing fraction's flag, you have -2 on any roll."
+    },
+    {
+      "heading": "Helmet, Weapon and Flag",
+      "text": "Everyone is encouraged to wear their helmet, weapon, or both so their fraction is currently distinguished in real life. The flag bearer must carry the flag with him or at least keep it 2 meters from them, at any time during the game."
+    }
   ]
 }

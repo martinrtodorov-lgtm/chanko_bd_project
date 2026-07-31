@@ -18,15 +18,14 @@ function loadImage(src) {
 
 export const DIRS = ["up", "down", "left", "right"];
 
-// Optional single-tile artwork, 32x32 each. Absent files fall back to the
-// procedural look. The files under assets/tiles/*/ are multi-item atlases, not
-// single tiles, so they are consumed by tools/atlas.js instead of loaded here.
-export const TILE_ART_PATHS = {
-  [T.FLOOR]: "assets/tiles/tile-floor.png",
-  [T.WALL]: "assets/tiles/tile-wall.png",
-  [T.DOOR]: "assets/tiles/tile-door.png",
-  [T.DECK]: "assets/tiles/tile-deck.png",
-};
+// Optional single-tile artwork, 32x32 each, keyed by tile type. Anything
+// listed here replaces the procedural look for that tile; anything missing
+// falls back. Left empty so no request 404s on load — to use real tile art,
+// drop a 32x32 file in and add its path here, e.g.
+//   [T.FLOOR]: "assets/tiles/tile-floor.png",
+// The files under assets/tiles/*/ are multi-item atlases, not single tiles,
+// so they are consumed by tools/atlas.js rather than loaded here.
+export const TILE_ART_PATHS = {};
 
 function loadOptional(src) {
   return new Promise((resolve) => {
@@ -74,9 +73,20 @@ export async function loadAssets(onProgress = () => {}) {
     )
   );
 
+  // Internal identity is derived from the portrait filename, never from
+  // npc-label. Labels hold real people's names, which may repeat (the same
+  // person can be both the Warlock and a character) and would collide as keys
+  // in team state, quest state and saves.
+  const idFromPortrait = (ref) => ref.split("/").pop().replace(/\.[^.]+$/, "").toLowerCase();
+  for (const npc of npcs) npc.id = idFromPortrait(npc["npc-portrait-reference"]);
+  warlock.id = "warlock";
+
+  const byId = { warlock };
+  for (const npc of npcs) byId[npc.id] = npc;
+
   // Nicknames drive the on-map nameplates.
   const nicknames = {};
-  for (const npc of npcs) nicknames[npc["npc-label"]] = npc["npc-nickname"] || npc["npc-label"];
+  for (const npc of npcs) nicknames[npc.id] = npc["npc-nickname"] || npc["npc-label"] || npc.id;
   nicknames.warlock = warlock["npc-nickname"] || "Warlock";
 
   // Optional tile artwork, keyed by tile type.
@@ -87,7 +97,7 @@ export async function loadAssets(onProgress = () => {}) {
     )
   );
 
-  return { spriteIndex, npcs, warlock, info, decor, images, nicknames, tileArt };
+  return { spriteIndex, npcs, warlock, info, decor, images, nicknames, byId, tileArt };
 }
 
 // Frame lookup helpers ------------------------------------------------------

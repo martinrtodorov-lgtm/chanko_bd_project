@@ -1,73 +1,73 @@
 {
-  "npc-label": "warlock",
-  "npc-nickname": "PLACEHOLDER Warlock Nickname",
-  "npc-profession": "Warlock",
+  "npc-label": "Martin Todorov",
+  "npc-nickname": "RagnarokVIP",
+  "npc-profession": "warlock",
   "npc-portrait-reference": "assets/portraits/warlock.jpg",
-  "npc-greeting-text": "PLACEHOLDER greeting for the warlock.",
-  "npc-all-trials-complete-text": "PLACEHOLDER text shown after all seven trials are complete.",
+  "npc-greeting-text": "You dare challenge me? You better bring your A-game, buster.",
+  "npc-all-trials-complete-text": "I admit it. You have won me over.",
   "trials": [
     {
       "index": 1,
-      "trial-name": "PLACEHOLDER First Trial",
-      "trial-information": "PLACEHOLDER information for the first trial.",
-      "trial-hint": "PLACEHOLDER hint for the first trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the first trial.",
+      "trial-name": "Stamina",
+      "trial-information": "Historically, it has been argued if Vikings or Pirates can drink more. Well now we can find out! Your team and the opposing team will race to see who will be the first person to complete the following stash:\n\n2 bottles of rum\n2 bottles of mineral water\n1 bottle of sparkling water\n1 galon of beer\n\nThe winning fraction earns 2 gold pieces each. Plastic cups should be used. If anybody spills on purpose, a patron bottle of Captain Fred is added to the team and the person is disqualified from the challenge. Once one team finishes their stash, the game ends.",
+      "trial-hint": "A spiced race will determine your true heritage.",
+      "trial-completion-message": "Damn it, you haven't drunk like that since your university years.",
       "trial-state": "available",
-      "trial-completion-code": "110001"
+      "trial-completion-code": "357623"
     },
     {
       "index": 2,
-      "trial-name": "PLACEHOLDER Second Trial",
-      "trial-information": "PLACEHOLDER information for the second trial.",
-      "trial-hint": "PLACEHOLDER hint for the second trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the second trial.",
+      "trial-name": "Adaptability",
+      "trial-information": "Who are the true masters of sailing? You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "220002"
+      "trial-completion-code": "236345"
     },
     {
       "index": 3,
-      "trial-name": "PLACEHOLDER Third Trial",
-      "trial-information": "PLACEHOLDER information for the third trial.",
-      "trial-hint": "PLACEHOLDER hint for the third trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the third trial.",
+      "trial-name": "Will",
+      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "330003"
+      "trial-completion-code": "236346"
     },
     {
       "index": 4,
-      "trial-name": "PLACEHOLDER Fourth Trial",
-      "trial-information": "PLACEHOLDER information for the fourth trial.",
-      "trial-hint": "PLACEHOLDER hint for the fourth trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the fourth trial.",
+      "trial-name": "Wills",
+      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "440004"
+      "trial-completion-code": "232247"
     },
     {
       "index": 5,
-      "trial-name": "PLACEHOLDER Fifth Trial",
-      "trial-information": "PLACEHOLDER information for the fifth trial.",
-      "trial-hint": "PLACEHOLDER hint for the fifth trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the fifth trial.",
+      "trial-name": "Wilsssl",
+      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "550005"
+      "trial-completion-code": "216347"
     },
     {
       "index": 6,
-      "trial-name": "PLACEHOLDER Sixth Trial",
-      "trial-information": "PLACEHOLDER information for the sixth trial.",
-      "trial-hint": "PLACEHOLDER hint for the sixth trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the sixth trial.",
+      "trial-name": "Wilsssld",
+      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "660006"
+      "trial-completion-code": "236348"
     },
     {
       "index": 7,
-      "trial-name": "PLACEHOLDER Seventh Trial",
-      "trial-information": "PLACEHOLDER information for the seventh trial.",
-      "trial-hint": "PLACEHOLDER hint for the seventh trial.",
-      "trial-completion-message": "PLACEHOLDER completion message for the seventh trial.",
+      "trial-name": "Wilsssl22",
+      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-hint": "For 3 gold, I will give you an advantage.",
+      "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
-      "trial-completion-code": "770007"
+      "trial-completion-code": "216349"
     }
   ]
 }

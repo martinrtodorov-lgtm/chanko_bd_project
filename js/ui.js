@@ -48,10 +48,13 @@ function navigable(container, buttons, onPick, onCancel) {
   };
 
   const onKey = (e) => {
-    if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); step(1); }
-    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
-    else if (e.key === "Enter") { e.preventDefault(); if (i >= 0 && !buttons[i].disabled) onPick(i); }
-    else if (e.key === "Escape" && onCancel) { e.preventDefault(); onCancel(); }
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") step(1);
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") step(-1);
+    else if (e.key === "Enter") { if (i >= 0 && !buttons[i].disabled) onPick(i); }
+    else if (e.key === "Escape" && onCancel) onCancel();
+    else return;
+    e.preventDefault();
+    e.stopPropagation();
   };
   window.addEventListener("keydown", onKey, true);
   return () => window.removeEventListener("keydown", onKey, true);
@@ -89,7 +92,7 @@ export function showFactionSelect() {
 
 // --- Teams menu ------------------------------------------------------------
 
-export function showTeams(state, { forced = false } = {}) {
+export function showTeams(state, assets, { forced = false } = {}) {
   return new Promise((resolve) => {
     const layer = panel("layer-teams");
     const opposing = state.faction === "pirate" ? "viking" : "pirate";
@@ -141,7 +144,17 @@ export function showTeams(state, { forced = false } = {}) {
       chanko.innerHTML = `<span class="name">Chanko</span><span class="tag">leader</span>`;
       cols[TEAM.PLAYER].appendChild(chanko);
 
-      for (const label of Object.keys(state.teams).sort()) {
+      // Sorted by the person's real name, not the internal id.
+      const displayName = (id) =>
+        (assets.byId[id] && assets.byId[id]["npc-label"]) || id;
+      const profession = (id) =>
+        (assets.byId[id] && assets.byId[id]["npc-profession"]) || "";
+
+      const ids = Object.keys(state.teams).sort((a, b) =>
+        displayName(a).localeCompare(displayName(b))
+      );
+
+      for (const label of ids) {
         const team = state.teams[label];
         const li = document.createElement("li");
         li.className = "team-entry";
@@ -174,9 +187,13 @@ export function showTeams(state, { forced = false } = {}) {
 
         const name = document.createElement("span");
         name.className = "name";
-        name.textContent = label;
+        name.textContent = displayName(label);
 
-        li.append(left, name, right);
+        const role = document.createElement("span");
+        role.className = "tag";
+        role.textContent = profession(label);
+
+        li.append(left, name, role, right);
         cols[team].appendChild(li);
       }
 
@@ -209,7 +226,13 @@ export function showTeams(state, { forced = false } = {}) {
     };
 
     const onKey = (e) => {
-      if (e.key === "t" || e.key === "T" || e.key === "Escape") { e.preventDefault(); tryClose(); }
+      if (e.key === "t" || e.key === "T" || e.key === "Escape") {
+        // Stop here, or the same keypress bubbles to the global handler, which
+        // sees the overlay already closed and reopens it immediately.
+        e.preventDefault();
+        e.stopPropagation();
+        tryClose();
+      }
     };
     window.addEventListener("keydown", onKey, true);
     closeBtn.addEventListener("click", tryClose);
@@ -371,10 +394,15 @@ export function showInfo(info) {
     const close = mount(layer);
     const finish = () => { window.removeEventListener("keydown", onKey, true); close(); resolve(); };
     const onKey = (e) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); go(page + 1); }
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); go(page - 1); }
-      else if (e.key >= "1" && e.key <= String(pages.length)) { e.preventDefault(); go(+e.key - 1); }
-      else if (e.key === "i" || e.key === "I" || e.key === "Escape") { e.preventDefault(); finish(); }
+      const digit = /^[0-9]$/.test(e.key) ? +e.key : null;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") go(page + 1);
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") go(page - 1);
+      else if (digit !== null && digit >= 1 && digit <= pages.length) go(digit - 1);
+      else if (e.key === "i" || e.key === "I" || e.key === "Escape") finish();
+      else return;
+      // Handled — stop before the global handler sees it and reopens this.
+      e.preventDefault();
+      e.stopPropagation();
     };
     window.addEventListener("keydown", onKey, true);
     layer.querySelector("#info-close").addEventListener("click", finish);

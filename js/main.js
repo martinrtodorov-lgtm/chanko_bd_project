@@ -156,7 +156,7 @@ window.addEventListener("keydown", async (e) => {
   } else if (k === "t") {
     e.preventDefault();
     keys.clear();
-    await showTeams(state);
+    await showTeams(state, assets);
     save(state);
   } else if (k === "i") {
     e.preventDefault();
@@ -190,7 +190,7 @@ function beginPlay(loaded) {
 async function newGame() {
   const faction = await showFactionSelect();
   const fresh = createState(faction, assets.npcs, map);
-  await showTeams(fresh, { forced: true });
+  await showTeams(fresh, assets, { forced: true });
   save(fresh);
   beginPlay(fresh);
 }

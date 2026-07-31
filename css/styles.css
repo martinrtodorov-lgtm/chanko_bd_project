@@ -245,7 +245,7 @@ kbd {
   border-radius: 4px;
   font-size: 0.86rem;
 }
-.team-entry .name { flex: 1; text-transform: capitalize; }
+.team-entry .name { flex: 1; }
 .team-entry.is-fixed { background: rgba(77, 143, 208, 0.18); }
 .team-entry .tag { font-size: 0.7rem; color: var(--ink-dim); letter-spacing: 0.08em; }
 .arrow {

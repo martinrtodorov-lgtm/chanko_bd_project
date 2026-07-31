@@ -27,9 +27,9 @@ async function reportedCheck({ portraitSrc, name, profession, dc, ability }) {
 // --- Standard NPCs ---------------------------------------------------------
 
 async function talkToNpc(state, npc) {
-  const label = npc["npc-label"];
+  const label = npc.id;
   const portraitSrc = `./${npc["npc-portrait-reference"]}`;
-  const name = npc["npc-nickname"] || label;
+  const name = npc["npc-nickname"] || npc["npc-label"] || label;
   const profession = npc["npc-profession"] || "";
 
   for (;;) {
@@ -120,7 +120,7 @@ async function talkToNpc(state, npc) {
 
 async function talkToWarlock(state, warlock) {
   const portraitSrc = `./${warlock["npc-portrait-reference"]}`;
-  const name = warlock["npc-nickname"] || "Warlock";
+  const name = warlock["npc-nickname"] || warlock["npc-label"] || "Warlock";
   const profession = warlock["npc-profession"] || "Warlock";
 
   for (;;) {
@@ -218,8 +218,8 @@ async function talkToWarlock(state, warlock) {
 }
 
 /** Returns true when this conversation triggered the ending. */
-export function interactWith(state, assets, label) {
-  if (label === "warlock") return talkToWarlock(state, assets.warlock);
-  const npc = assets.npcs.find((n) => n["npc-label"] === label);
+export function interactWith(state, assets, id) {
+  if (id === "warlock") return talkToWarlock(state, assets.warlock);
+  const npc = assets.byId[id];
   return npc ? talkToNpc(state, npc) : Promise.resolve(false);
 }

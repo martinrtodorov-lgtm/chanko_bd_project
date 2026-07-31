@@ -42,10 +42,10 @@ export function createState(faction, npcData, map = generateMap()) {
   const npcs = {};
   const quests = {};
   for (const npc of npcData) {
-    const label = npc["npc-label"];
-    teams[label] = TEAM.NEUTRAL;
-    npcs[label] = pickTile();
-    quests[label] = { state: QUEST.NONE, sweetTalkFailed: false };
+    const id = npc.id;
+    teams[id] = TEAM.NEUTRAL;
+    npcs[id] = pickTile();
+    quests[id] = { state: QUEST.NONE, sweetTalkFailed: false };
   }
 
   return {

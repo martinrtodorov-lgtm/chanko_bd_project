@@ -65,24 +65,71 @@ const REQUIRED = [
   "npc-greeting-text", "npc-quest-information", "npc-quest-completion-message",
   "npc-quest-state", "npc-quest-completion-code",
 ];
+
+// Identity mirrors js/assets.js: derived from the portrait filename, never
+// from npc-label, which holds real names that may repeat.
+const idOf = (n) => n["npc-portrait-reference"].split("/").pop().replace(/\.[^.]+$/, "").toLowerCase();
+for (const n of npcs) n.id = idOf(n);
+warlock.id = "warlock";
+
 if (npcs.length !== 15) fail(`expected 15 NPCs, found ${npcs.length}`);
 else ok("15 assignable NPCs");
 
 for (const n of npcs) {
   for (const k of REQUIRED) if (!(k in n)) fail(`${n["npc-label"]} missing ${k}`);
   if (!/^\d{6}$/.test(n["npc-quest-completion-code"])) fail(`${n["npc-label"]} code is not 6 digits`);
+  if (n["npc-quest-state"] !== "not-accepted") fail(`${n["npc-label"]} npc-quest-state must start as not-accepted`);
 }
-const codes = npcs.map((n) => n["npc-quest-completion-code"]);
-if (new Set(codes).size !== codes.length) fail("duplicate NPC completion codes");
-else ok("NPC codes are 6-digit and unique");
+
+const ids = npcs.map((n) => n.id);
+if (new Set(ids).size !== ids.length) fail(`duplicate portrait identities: ${ids.join(", ")}`);
+else ok(`15 distinct identities, one per portrait`);
+if (ids.includes("warlock")) fail("warlock must not be in npcs.json");
+else ok("warlock excluded from the assignable roster");
+
+// Real names may legitimately repeat; surface it so it is a choice, not a slip.
+const names = npcs.map((n) => n["npc-label"]).concat(warlock["npc-label"]);
+const dupNames = names.filter((v, i) => names.indexOf(v) !== i);
+if (dupNames.length) {
+  console.log(`NOTE  name shown on more than one character: ${[...new Set(dupNames)].join(", ")}`);
+}
+
+const codes = npcs.map((n) => n["npc-quest-completion-code"])
+  .concat(warlock.trials.map((t) => t["trial-completion-code"]));
+if (new Set(codes).size !== codes.length) {
+  const dup = codes.filter((v, i) => codes.indexOf(v) !== i);
+  fail(`duplicate completion codes: ${[...new Set(dup)].join(", ")}`);
+} else ok(`all ${codes.length} completion codes are 6-digit and unique`);
 
 if (warlock.trials.length !== 7) fail(`expected 7 trials, found ${warlock.trials.length}`);
 else ok("7 warlock trials");
-for (const t of warlock.trials) {
+warlock.trials.forEach((t, i) => {
   if (!/^\d{6}$/.test(t["trial-completion-code"])) fail(`trial ${t.index} code is not 6 digits`);
+  const expected = i === 0 ? "available" : "locked";
+  if (t["trial-state"] !== expected) fail(`trial ${t.index} state must be "${expected}"`);
+});
+
+// Unwritten content: catches template text left in by accident.
+const PLACEHOLDER = /YOUR TEXT|PLACEHOLDER/i;
+const unwritten = [];
+for (const n of npcs) {
+  for (const k of REQUIRED) if (PLACEHOLDER.test(String(n[k]))) unwritten.push(`${n["npc-label"]} · ${k}`);
 }
-if (npcs.some((n) => n["npc-label"] === "warlock")) fail("warlock must not be in npcs.json");
-else ok("warlock excluded from the assignable roster");
+for (const [k, v] of Object.entries(warlock)) {
+  if (typeof v === "string" && PLACEHOLDER.test(v)) unwritten.push(`Warlock · ${k}`);
+}
+warlock.trials.forEach((t) => {
+  for (const [k, v] of Object.entries(t)) {
+    if (typeof v === "string" && PLACEHOLDER.test(v)) unwritten.push(`trial ${t.index} · ${k}`);
+  }
+});
+for (const b of JSON.parse(fs.readFileSync("data/info.json", "utf8")).blocks) {
+  if (PLACEHOLDER.test(b.heading) || PLACEHOLDER.test(b.text)) unwritten.push(`info · ${b.heading}`);
+}
+if (unwritten.length) {
+  console.log(`NOTE  ${unwritten.length} field(s) still hold template text:`);
+  unwritten.forEach((u) => console.log(`        ${u}`));
+} else ok("no placeholder text left anywhere");
 
 // --- Spawning --------------------------------------------------------------
 
