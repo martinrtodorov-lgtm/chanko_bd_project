@@ -135,9 +135,16 @@ for (const hx of HOUSE_XS) {
     if (tileAt(map, x, HOUSE.y1) === T.DOOR) doors++;
   }
   if (!doors) doorless++;
-  const inside = { x: hx + Math.floor(HOUSE.w / 2), y: HOUSE.y0 + Math.floor((HOUSE.y1 - HOUSE.y0) / 2) };
-  if (tileAt(map, inside.x, inside.y) !== T.FLOOR) sealed++;
-  else if (!reach[inside.y * MAP_W + inside.x]) sealed++;
+
+  // Reachable means "you can get inside", not "one particular tile is free" —
+  // furniture legitimately stands on individual tiles, including the centre.
+  let anyInside = false;
+  for (let y = HOUSE.y0 + 1; y < HOUSE.y1 && !anyInside; y++) {
+    for (let x = hx + 1; x < hx + HOUSE.w; x++) {
+      if (tileAt(map, x, y) === T.FLOOR && reach[y * MAP_W + x]) { anyInside = true; break; }
+    }
+  }
+  if (!anyInside) sealed++;
 }
 if (doorless) fail(`${doorless} house(s) have no doorway`);
 else ok(`all ${HOUSE_XS.length} houses have a doorway on the south wall`);

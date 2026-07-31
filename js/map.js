@@ -225,6 +225,14 @@ export function generateMap(seed = 20260731, decor = null) {
 
   const LARGE_AREA = 1500;   // roughly a bed, table, wardrobe or bar counter
   const TREE_SPRITE_SHARE = 0.6;
+  // The tilesets are drawn smaller than Chanko, who stands 64px tall on screen.
+  // Furniture is scaled up so a table reads as something a person sits at.
+  const FURNITURE_SCALE = 1.5;
+  const scaled = (item) => ({
+    src: item.src,
+    w: Math.round(item.w * FURNITURE_SCALE),
+    h: Math.round(item.h * FURNITURE_SCALE),
+  });
 
   /**
    * Furnish a building. Large pieces are pushed against the walls the way real
@@ -265,7 +273,7 @@ export function generateMap(seed = 20260731, decor = null) {
       if (!pool.length) return;
       let placed = 0;
       for (let a = 0; a < count * 60 && placed < count; a++) {
-        const item = pool[(rng() * pool.length) | 0];
+        const item = scaled(pool[(rng() * pool.length) | 0]);
         let tx, ty;
         if (spots) {
           const s = spots[(rng() * spots.length) | 0];
@@ -313,6 +321,77 @@ export function generateMap(seed = 20260731, decor = null) {
     }
     const tDoor0 = TAVERN.x0 + TAVERN.doorOffset;
     furnish(decor.tavern, TAVERN, { large: 30, small: 26 }, tDoor0, tDoor0 + TAVERN.doorW - 1);
+
+    // --- Outdoor seating ---------------------------------------------------
+
+    const openGround = (x, y) => {
+      const t = tileOf(x, y);
+      return (t === T.GRASS || t === T.LAWN) && !blocked.has(idx(x, y));
+    };
+
+    /**
+     * A prop reserves every tile under its width, not just the one it is
+     * anchored to, so the doorway test has to cover the whole span. Checking
+     * only the anchor tile lets a wide item creep into the lane and seal a
+     * building.
+     */
+    const spanClearOf = (tx, w, laneFn) => {
+      const span = Math.max(1, Math.ceil(w / TILE));
+      const x0 = tx - ((span - 1) >> 1);
+      for (let i = 0; i < span; i++) if (laneFn(x0 + i)) return false;
+      return true;
+    };
+
+    const placeProp = (item, tx, ty, laneFn) => {
+      const s = scaled(item);
+      if (laneFn && !spanClearOf(tx, s.w, laneFn)) return false;
+      if (!fits(tx, ty, s.w, openGround)) return false;
+      props.push({ src: s.src, tx, ty, w: s.w, h: s.h });
+      occupy(tx, ty, s.w);
+      return true;
+    };
+
+    const scatterChairs = (area, count, laneFn) => {
+      if (!decor.chair || !decor.chair.length) return;
+      for (let k = 0, guard = 0; k < count && guard < count * 80; guard++) {
+        const item = scaled(decor.chair[(rng() * decor.chair.length) | 0]);
+        const tx = area.x0 + ((rng() * (area.x1 - area.x0 + 1)) | 0);
+        const ty = area.y0 + ((rng() * (area.y1 - area.y0 + 1)) | 0);
+        if (!spanClearOf(tx, item.w, laneFn)) continue;
+        if (!fits(tx, ty, item.w, openGround)) continue;
+        props.push({ src: item.src, tx, ty, w: item.w, h: item.h });
+        occupy(tx, ty, item.w);
+        k++;
+      }
+    };
+
+    const tables = decor.tableset && decor.tableset.length ? decor.tableset : null;
+    const pickTable = () => tables[(rng() * tables.length) | 0];
+
+    if (tables) {
+      // Four tables in the tavern forecourt, plus loose chairs. The strip in
+      // front of the door is kept clear — the Warlock also stands in it.
+      const doorLane = (x) => x >= tDoor0 - 2 && x <= tDoor0 + TAVERN.doorW + 1;
+      for (const dx of [6, 14, 34, 42]) {
+        placeProp(pickTable(), TAVERN.x0 + dx, TAVERN.y1 + 5, doorLane);
+      }
+      scatterChairs(
+        { x0: TAVERN.x0 + 3, x1: TAVERN.x1 - 3, y0: TAVERN.y1 + 2, y1: TAVERN.y1 + 8 },
+        16, doorLane
+      );
+
+      // Two tables in front of each house, between the wall and the lawn.
+      for (const hx of HOUSE_XS) {
+        const d0 = hx + HOUSE.doorOffset;
+        const lane = (x) => x >= d0 - 2 && x <= d0 + HOUSE.doorW + 1;
+        placeProp(pickTable(), hx + 5, HOUSE.y1 + 3, lane);
+        placeProp(pickTable(), hx + 19, HOUSE.y1 + 3, lane);
+        scatterChairs(
+          { x0: hx + 2, x1: hx + HOUSE.w - 2, y0: HOUSE.y1 + 2, y1: HOUSE.y1 + 6 },
+          6, lane
+        );
+      }
+    }
 
     // The ship sits in the middle of the pool; the water already blocks movement.
     if (decor.ship) {

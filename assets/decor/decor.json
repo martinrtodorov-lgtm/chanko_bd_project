@@ -1011,5 +1011,69 @@
     "src": "assets/decor/pool/barrels-00.png",
     "w": 46,
     "h": 35
-  }
+  },
+  "tableset": [
+    {
+      "src": "assets/decor/tavern/tavern-00.png",
+      "w": 51,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-01.png",
+      "w": 52,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-04.png",
+      "w": 51,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-05.png",
+      "w": 52,
+      "h": 39
+    },
+    {
+      "src": "assets/decor/tavern/tavern-40.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-41.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-42.png",
+      "w": 52,
+      "h": 31
+    },
+    {
+      "src": "assets/decor/tavern/tavern-43.png",
+      "w": 52,
+      "h": 31
+    }
+  ],
+  "chair": [
+    {
+      "src": "assets/decor/tavern/tavern-11.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-13.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-16.png",
+      "w": 27,
+      "h": 27
+    },
+    {
+      "src": "assets/decor/tavern/tavern-17.png",
+      "w": 27,
+      "h": 27
+    }
+  ]
 }

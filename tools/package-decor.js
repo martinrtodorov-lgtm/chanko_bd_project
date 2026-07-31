@@ -43,6 +43,18 @@ for (const g of GROUPS) {
   console.log(`${g.key.padEnd(8)} ${g.single ? 1 : items.length} item(s)  from ${g.from.join(", ")}`);
 }
 
+// Named sub-groups picked out of the tavern set by catalogue index, for the
+// outdoor seating in front of the tavern and the houses. Indices come from
+// the numbered contact sheet; they are stable because packaging is
+// deterministic. Re-check them if the tavern atlas is ever re-cut.
+const TABLE_SETS = [0, 1, 4, 5, 40, 41, 42, 43];  // table with chairs attached
+const STOOLS = [11, 13, 16, 17];                  // loose seating
+
+catalogue.tableset = TABLE_SETS.map((i) => catalogue.tavern[i]).filter(Boolean);
+catalogue.chair = STOOLS.map((i) => catalogue.tavern[i]).filter(Boolean);
+console.log(`tableset ${catalogue.tableset.length} item(s)  (from tavern indices ${TABLE_SETS.join(",")})`);
+console.log(`chair    ${catalogue.chair.length} item(s)  (from tavern indices ${STOOLS.join(",")})`);
+
 fs.writeFileSync(`${DST}/decor.json`, JSON.stringify(catalogue, null, 2));
 
 const total = Object.values(catalogue)
