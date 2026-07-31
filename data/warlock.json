@@ -1,0 +1,73 @@
+{
+  "npc-label": "warlock",
+  "npc-nickname": "PLACEHOLDER Warlock Nickname",
+  "npc-profession": "Warlock",
+  "npc-portrait-reference": "assets/portraits/warlock.jpg",
+  "npc-greeting-text": "PLACEHOLDER greeting for the warlock.",
+  "npc-all-trials-complete-text": "PLACEHOLDER text shown after all seven trials are complete.",
+  "trials": [
+    {
+      "index": 1,
+      "trial-name": "PLACEHOLDER First Trial",
+      "trial-information": "PLACEHOLDER information for the first trial.",
+      "trial-hint": "PLACEHOLDER hint for the first trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the first trial.",
+      "trial-state": "available",
+      "trial-completion-code": "110001"
+    },
+    {
+      "index": 2,
+      "trial-name": "PLACEHOLDER Second Trial",
+      "trial-information": "PLACEHOLDER information for the second trial.",
+      "trial-hint": "PLACEHOLDER hint for the second trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the second trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "220002"
+    },
+    {
+      "index": 3,
+      "trial-name": "PLACEHOLDER Third Trial",
+      "trial-information": "PLACEHOLDER information for the third trial.",
+      "trial-hint": "PLACEHOLDER hint for the third trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the third trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "330003"
+    },
+    {
+      "index": 4,
+      "trial-name": "PLACEHOLDER Fourth Trial",
+      "trial-information": "PLACEHOLDER information for the fourth trial.",
+      "trial-hint": "PLACEHOLDER hint for the fourth trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the fourth trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "440004"
+    },
+    {
+      "index": 5,
+      "trial-name": "PLACEHOLDER Fifth Trial",
+      "trial-information": "PLACEHOLDER information for the fifth trial.",
+      "trial-hint": "PLACEHOLDER hint for the fifth trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the fifth trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "550005"
+    },
+    {
+      "index": 6,
+      "trial-name": "PLACEHOLDER Sixth Trial",
+      "trial-information": "PLACEHOLDER information for the sixth trial.",
+      "trial-hint": "PLACEHOLDER hint for the sixth trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the sixth trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "660006"
+    },
+    {
+      "index": 7,
+      "trial-name": "PLACEHOLDER Seventh Trial",
+      "trial-information": "PLACEHOLDER information for the seventh trial.",
+      "trial-hint": "PLACEHOLDER hint for the seventh trial.",
+      "trial-completion-message": "PLACEHOLDER completion message for the seventh trial.",
+      "trial-state": "locked",
+      "trial-completion-code": "770007"
+    }
+  ]
+}

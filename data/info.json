@@ -1,0 +1,10 @@
+{
+  "title": "How this game works",
+  "blocks": [
+    { "heading": "PLACEHOLDER Block One", "text": "PLACEHOLDER text for the first information block." },
+    { "heading": "PLACEHOLDER Block Two", "text": "PLACEHOLDER text for the second information block." },
+    { "heading": "PLACEHOLDER Block Three", "text": "PLACEHOLDER text for the third information block." },
+    { "heading": "PLACEHOLDER Block Four", "text": "PLACEHOLDER text for the fourth information block." },
+    { "heading": "PLACEHOLDER Block Five", "text": "PLACEHOLDER text for the fifth information block." }
+  ]
+}

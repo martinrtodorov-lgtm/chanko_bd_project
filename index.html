@@ -8,18 +8,38 @@
 </head>
 <body>
 
-  <!-- Start screen: image is a CSS background, buttons are real DOM elements -->
+  <!-- Start screen -->
   <section id="start-screen" class="screen is-active">
     <div class="start-menu">
       <button id="btn-start" class="menu-button" type="button">Start</button>
       <button id="btn-continue" class="menu-button" type="button" disabled>Continue</button>
+      <p id="loading" class="loading"></p>
     </div>
   </section>
 
   <!-- Game screen -->
   <section id="game-screen" class="screen">
-    <canvas id="game-canvas" width="1280" height="720"></canvas>
+    <div class="viewport">
+      <canvas id="game-canvas" width="1280" height="704"></canvas>
+
+      <div id="hud" class="hud">
+        <div class="hud-row"><span>Wisdom</span><b>+ 1</b></div>
+        <div class="hud-row"><span>Intelligence</span><b>+ 2</b></div>
+        <div class="hud-row"><span>Charisma</span><b>+ 3</b></div>
+      </div>
+
+      <div class="controls-hint">
+        <span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> move</span>
+        <span><kbd>E</kbd> talk</span>
+        <span><kbd>A</kbd> attack</span>
+        <span><kbd>T</kbd> teams</span>
+        <span><kbd>I</kbd> info</span>
+      </div>
+    </div>
   </section>
+
+  <!-- Overlay host for menus and dialogue -->
+  <div id="overlay" class="overlay"></div>
 
   <script type="module" src="./js/main.js"></script>
 </body>

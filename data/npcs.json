@@ -1,0 +1,167 @@
+[
+  {
+    "npc-label": "apothecary",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Apothecary",
+    "npc-portrait-reference": "assets/portraits/apothecary.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the apothecary.",
+    "npc-quest-information": "PLACEHOLDER quest information for the apothecary.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the apothecary.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "314159"
+  },
+  {
+    "npc-label": "barman",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Barman",
+    "npc-portrait-reference": "assets/portraits/barman.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the barman.",
+    "npc-quest-information": "PLACEHOLDER quest information for the barman.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the barman.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "271828"
+  },
+  {
+    "npc-label": "beastmaster",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Beastmaster",
+    "npc-portrait-reference": "assets/portraits/beastmaster.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the beastmaster.",
+    "npc-quest-information": "PLACEHOLDER quest information for the beastmaster.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the beastmaster.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "161803"
+  },
+  {
+    "npc-label": "cook",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Cook",
+    "npc-portrait-reference": "assets/portraits/cook.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the cook.",
+    "npc-quest-information": "PLACEHOLDER quest information for the cook.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the cook.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "141421"
+  },
+  {
+    "npc-label": "grillmaster",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Grillmaster",
+    "npc-portrait-reference": "assets/portraits/grillmaster.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the grillmaster.",
+    "npc-quest-information": "PLACEHOLDER quest information for the grillmaster.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the grillmaster.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "173205"
+  },
+  {
+    "npc-label": "herbalist",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Herbalist",
+    "npc-portrait-reference": "assets/portraits/herbalist.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the herbalist.",
+    "npc-quest-information": "PLACEHOLDER quest information for the herbalist.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the herbalist.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "223606"
+  },
+  {
+    "npc-label": "hunter",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Hunter",
+    "npc-portrait-reference": "assets/portraits/hunter.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the hunter.",
+    "npc-quest-information": "PLACEHOLDER quest information for the hunter.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the hunter.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "264575"
+  },
+  {
+    "npc-label": "jester",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Jester",
+    "npc-portrait-reference": "assets/portraits/jester.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the jester.",
+    "npc-quest-information": "PLACEHOLDER quest information for the jester.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the jester.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "302585"
+  },
+  {
+    "npc-label": "mason",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Mason",
+    "npc-portrait-reference": "assets/portraits/mason.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the mason.",
+    "npc-quest-information": "PLACEHOLDER quest information for the mason.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the mason.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "333333"
+  },
+  {
+    "npc-label": "miller",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Miller",
+    "npc-portrait-reference": "assets/portraits/miller.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the miller.",
+    "npc-quest-information": "PLACEHOLDER quest information for the miller.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the miller.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "414213"
+  },
+  {
+    "npc-label": "navigator",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Navigator",
+    "npc-portrait-reference": "assets/portraits/navigator.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the navigator.",
+    "npc-quest-information": "PLACEHOLDER quest information for the navigator.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the navigator.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "577215"
+  },
+  {
+    "npc-label": "rogue",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Rogue",
+    "npc-portrait-reference": "assets/portraits/rogue.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the rogue.",
+    "npc-quest-information": "PLACEHOLDER quest information for the rogue.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the rogue.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "618033"
+  },
+  {
+    "npc-label": "scribe",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Scribe",
+    "npc-portrait-reference": "assets/portraits/scribe.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the scribe.",
+    "npc-quest-information": "PLACEHOLDER quest information for the scribe.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the scribe.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "707106"
+  },
+  {
+    "npc-label": "watchman",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Watchman",
+    "npc-portrait-reference": "assets/portraits/watchman.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the watchman.",
+    "npc-quest-information": "PLACEHOLDER quest information for the watchman.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the watchman.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "866025"
+  },
+  {
+    "npc-label": "woodcutter",
+    "npc-nickname": "PLACEHOLDER Nickname",
+    "npc-profession": "Woodcutter",
+    "npc-portrait-reference": "assets/portraits/woodcutter.jpg",
+    "npc-greeting-text": "PLACEHOLDER greeting for the woodcutter.",
+    "npc-quest-information": "PLACEHOLDER quest information for the woodcutter.",
+    "npc-quest-completion-message": "PLACEHOLDER completion message for the woodcutter.",
+    "npc-quest-state": "not-accepted",
+    "npc-quest-completion-code": "909090"
+  }
+]
