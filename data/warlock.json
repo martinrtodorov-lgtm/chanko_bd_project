@@ -8,8 +8,8 @@
   "trials": [
     {
       "index": 1,
-      "trial-name": "Stamina",
-      "trial-information": "Historically, it has been argued if Vikings or Pirates can drink more. Well now we can find out! Your team and the opposing team will race to see who will be the first person to complete the following stash:\n\n2 bottles of rum\n2 bottles of mineral water\n1 bottle of sparkling water\n1 galon of beer\n\nThe winning fraction earns 2 gold pieces each. Plastic cups should be used. If anybody spills on purpose, a patron bottle of Captain Fred is added to the team and the person is disqualified from the challenge. Once one team finishes their stash, the game ends.",
+      "trial-name": "Test of Stamina",
+      "trial-information": "Historically, it has been argued if Vikings or Pirates can drink more. Well now we can find out! Your team and the opposing team will race to see who will be the first person to complete the following stash:\n\n2 bottles of rum\n2 bottles of mineral water\n1 bottle of sparkling water\n\nThe winning fraction earns 2 gold pieces each. Plastic cups should be used. If anybody spills on purpose, a patron bottle of Captain Fred is added to the team and the person is disqualified from the challenge. Once one team finishes their stash, the game ends.",
       "trial-hint": "A spiced race will determine your true heritage.",
       "trial-completion-message": "Damn it, you haven't drunk like that since your university years.",
       "trial-state": "available",
@@ -17,8 +17,8 @@
     },
     {
       "index": 2,
-      "trial-name": "Adaptability",
-      "trial-information": "Who are the true masters of sailing? You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
+      "trial-name": "Test of Adaptability",
+      "trial-information": "Who are the true masters of sailing? You and the opposing team will race in boats across a lake. You need to use the sails and reach a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
       "trial-hint": "For 3 gold, I will give you an advantage.",
       "trial-completion-message": "Amazing. It is like you've done it before.",
       "trial-state": "locked",
@@ -26,46 +26,46 @@
     },
     {
       "index": 3,
-      "trial-name": "Will",
-      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
-      "trial-hint": "For 3 gold, I will give you an advantage.",
-      "trial-completion-message": "Amazing. It is like you've done it before.",
+      "trial-name": "Tribute to the Drowned God",
+      "trial-information": "You have proven yourself in both drinking and sailing. But do the water gods love you? Show me how long you can hold your breath underwater. If you hold it longer than 30 seconds, you will get 1 gold coin. For every additional 30 seconds, you gain another 1 gold coin. You can only try once. Every other person can also try.\n\nYou can also bet a gold coin against a mighty foe and duel with pool noodles until one's cup falls. The loser owes the winner a gold coin.",
+      "trial-hint": "Nothing will help you here.",
+      "trial-completion-message": "You are like a fish, have you been swimming since you were a child?",
       "trial-state": "locked",
       "trial-completion-code": "236346"
     },
     {
       "index": 4,
-      "trial-name": "Wills",
-      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
-      "trial-hint": "For 3 gold, I will give you an advantage.",
-      "trial-completion-message": "Amazing. It is like you've done it before.",
+      "trial-name": "Trial of Knowledge",
+      "trial-information": "You are unstoppable physically but how much do you really know about pirates or vikings? There are 4 categories, Trivia, Literature and Mythology, Video Games or Music and difficulty from 100 to 500 points. The last person who guessed the answer correctly chooses which question they would like to answer. After the question is written on the board, the first person to raise their hand has the option to answer. If they answer wrong, the other players have a chance to steal the points. After all questions are answered, the game ends. Every 500 points equal a gold coin for each person.",
+      "trial-hint": "Your teammates cannot help you but your enemies can try to outwit you.",
+      "trial-completion-message": "Your teammates cannot help you but your enemies can try to outwit you.",
       "trial-state": "locked",
       "trial-completion-code": "232247"
     },
     {
       "index": 5,
-      "trial-name": "Wilsssl",
-      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
-      "trial-hint": "For 3 gold, I will give you an advantage.",
-      "trial-completion-message": "Amazing. It is like you've done it before.",
+      "trial-name": "Tribute to your Homage",
+      "trial-information": "You are strong, you are knowledgeble. But are you worthy? Gather 3 or 7 other willing participants who will bet 2 of their gold pieces to play. The game is a straight elimination bracket tournament of Karnobat chess. The rules are the following:\n\nEvery time you move a piece, you need to have a sip of Rakia. If you take more than a minute to make a move, you need to take a sip. If you win you continue and the winner takes all.",
+      "trial-hint": "Drinking is involved.",
+      "trial-completion-message": "I cannot believe that you are so good. Is it the drinking or the strategy?",
       "trial-state": "locked",
       "trial-completion-code": "216347"
     },
     {
       "index": 6,
-      "trial-name": "Wilsssld",
-      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
-      "trial-hint": "For 3 gold, I will give you an advantage.",
-      "trial-completion-message": "Amazing. It is like you've done it before.",
+      "trial-name": "Trial of Instinct",
+      "trial-information": "Grab the torch and light it. Until an hour passes or your light diminishes, the opposing team will run from you and hide. If you capture someone, you automatically gain all their gold coins, regardless of their quest progression and the game ends for them. Your team can participate to help you but they can also choose to let you do this alone.",
+      "trial-hint": "You will need to run, like, a lot.",
+      "trial-completion-message": "How????",
       "trial-state": "locked",
       "trial-completion-code": "236348"
     },
     {
       "index": 7,
-      "trial-name": "Wilsssl22",
-      "trial-information": "You and the opposing team will race in boats across a lake. You need to use the sails and reach to a designated location first. Don't worry, each crew will have someone to show them the ropes. The first team to do so wins 3 gold pieces each.",
-      "trial-hint": "For 3 gold, I will give you an advantage.",
-      "trial-completion-message": "Amazing. It is like you've done it before.",
+      "trial-name": "The Final Proof",
+      "trial-information": "You need to find all the gold coins and bring them to me. If you can show 100 gold coins before we leave for the concert, you will prove that Vikings are better than Pirates.",
+      "trial-hint": "Some are hidden in game, others are hidden in the villas.",
+      "trial-completion-message": "I admit defeat. The gods favor you!",
       "trial-state": "locked",
       "trial-completion-code": "216349"
     }

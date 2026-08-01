@@ -43,6 +43,7 @@ for (const n of Object.values(sprites.npcs)) refs.add(n.idle);
 for (const n of npcs) refs.add(n["npc-portrait-reference"]);
 refs.add(warlock["npc-portrait-reference"]);
 refs.add("assets/ui/start_screen.jpg");
+refs.add("assets/tiles/houses/bagofcoins.png");
 
 const decor = fs.existsSync("assets/decor/decor.json")
   ? JSON.parse(fs.readFileSync("assets/decor/decor.json", "utf8"))

@@ -9,6 +9,7 @@ export const TRIAL = { LOCKED: "locked", AVAILABLE: "available", ACCEPTED: "acce
 
 export const PLAYER_TEAM_CAP = 8;   // Chanko + 7
 export const ENEMY_TEAM_CAP = 8;
+export const COIN_BAG_AMOUNT = 10;
 export const DC_OWN_TEAM = 13;
 export const DC_OPPOSING = 18;
 export const DC_WARLOCK_HINT = 15;
@@ -51,6 +52,7 @@ export function createState(faction, npcData, map = generateMap()) {
   return {
     version: 1,
     faction,
+    coinBag: { ...pickTile(), taken: false },
     player: {
       x: (SPAWN_ANCHOR.x + 0.5) * TILE,
       y: (SPAWN_ANCHOR.y + 0.5) * TILE,
@@ -67,6 +69,20 @@ export function createState(faction, npcData, map = generateMap()) {
     },
     won: false,
   };
+}
+
+/**
+ * Saves written before the coin bag existed have no pickup at all. Give them
+ * one so an older save still gets the gold rather than silently missing it.
+ */
+export function ensureCoinBag(state, map) {
+  if (state.coinBag) return false;
+  const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
+  const open = [];
+  for (let i = 0; i < reach.length; i++) if (reach[i]) open.push(i);
+  const p = open[(Math.random() * open.length) | 0];
+  state.coinBag = { x: p % MAP_W, y: (p / MAP_W) | 0, taken: false };
+  return true;
 }
 
 // --- Team helpers ----------------------------------------------------------

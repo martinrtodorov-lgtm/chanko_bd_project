@@ -3,11 +3,11 @@
 import { generateMap, canWalk, TILE, VIEW_W, VIEW_H } from "./map.js";
 import { loadAssets } from "./assets.js";
 import {
-  createState, load, save, hasSave, WARLOCK_TILE,
+  createState, load, save, hasSave, ensureCoinBag, WARLOCK_TILE, COIN_BAG_AMOUNT,
 } from "./state.js";
 import { cameraFor, drawWorld, drawEntities } from "./render.js";
 import {
-  showFactionSelect, showTeams, showInfo, showEnding, isOverlayOpen,
+  showFactionSelect, showTeams, showInfo, showEnding, showMessage, isOverlayOpen,
 } from "./ui.js";
 import { interactWith } from "./interact.js";
 
@@ -32,7 +32,7 @@ let state = null;
 let running = false;
 
 const keys = new Set();
-const anim = { action: "idle", frame: 0, walkClock: 0, attackClock: 0 };
+const anim = { action: "idle", frame: 0, walkClock: 0, attackClock: 0, clock: 0 };
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.remove("is-active"));
@@ -54,7 +54,8 @@ function freeAt(cx, cy) {
 
 // --- Interaction target ----------------------------------------------------
 
-function nearestNpc() {
+/** Nearest thing E would act on: an NPC to talk to, or the coin bag to pick up. */
+function nearestTarget() {
   const px = state.player.x, py = state.player.y;
   let best = null, bestD = INTERACT_RANGE;
 
@@ -64,6 +65,9 @@ function nearestNpc() {
   };
   for (const [label, pos] of Object.entries(state.npcs)) consider(label, pos.x, pos.y);
   consider("warlock", WARLOCK_TILE.x, WARLOCK_TILE.y);
+  if (state.coinBag && !state.coinBag.taken) {
+    consider("coin-bag", state.coinBag.x, state.coinBag.y);
+  }
   return best;
 }
 
@@ -81,6 +85,8 @@ function frame(now) {
 }
 
 function update(dt) {
+  anim.clock += dt * 1000;   // drives the quest-marker bob
+
   let dx = 0, dy = 0;
   if (keys.has("ArrowLeft")) dx -= 1;
   if (keys.has("ArrowRight")) dx += 1;
@@ -127,7 +133,7 @@ function update(dt) {
 function draw() {
   const cam = cameraFor(state.player);
   drawWorld(ctx, map, cam, assets.tileArt);
-  drawEntities(ctx, state, assets, cam, anim, isOverlayOpen() ? null : nearestNpc(), map);
+  drawEntities(ctx, state, assets, cam, anim, isOverlayOpen() ? null : nearestTarget(), map);
 }
 
 // --- Input -----------------------------------------------------------------
@@ -147,9 +153,15 @@ window.addEventListener("keydown", async (e) => {
     if (anim.attackClock <= 0) anim.attackClock = ATTACK_MS;
   } else if (k === "e") {
     e.preventDefault();
-    const label = nearestNpc();
+    const label = nearestTarget();
     if (!label) return;
     keys.clear();
+    if (label === "coin-bag") {
+      state.coinBag.taken = true;
+      save(state);
+      await showMessage("Gold!", `You have found ${COIN_BAG_AMOUNT} gold!`);
+      return;
+    }
     const won = await interactWith(state, assets, label);
     save(state);
     if (won) endGame();
@@ -179,6 +191,7 @@ function endGame() {
 
 function beginPlay(loaded) {
   state = loaded;
+  ensureCoinBag(state, map);
   hud.classList.add("is-visible");
   showScreen("game");
   running = true;

@@ -27,6 +27,9 @@ export const DIRS = ["up", "down", "left", "right"];
 // so they are consumed by tools/atlas.js rather than loaded here.
 export const TILE_ART_PATHS = {};
 
+// A single pickup lying somewhere on the map.
+export const COIN_BAG_SRC = "assets/tiles/houses/bagofcoins.png";
+
 function loadOptional(src) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -54,6 +57,7 @@ export async function loadAssets(onProgress = () => {}) {
   for (const npc of Object.values(spriteIndex.npcs)) paths.add(npc.idle);
   for (const npc of npcs) paths.add(npc["npc-portrait-reference"]);
   paths.add(warlock["npc-portrait-reference"]);
+  paths.add(COIN_BAG_SRC);
   if (decor) {
     for (const v of Object.values(decor)) {
       if (Array.isArray(v)) v.forEach((it) => paths.add(it.src));

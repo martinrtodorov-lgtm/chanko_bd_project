@@ -12,7 +12,7 @@ globalThis.localStorage = {
 };
 
 const S = await import("../js/state.js");
-const { generateMap } = await import("../js/map.js");
+const { generateMap, canWalk, computeReachable, SPAWN_ANCHOR, MAP_W } = await import("../js/map.js");
 
 let pass = 0, fail = 0;
 const t = (name, fn) => {
@@ -157,6 +157,61 @@ t("all seven trial codes are usable and distinct", () => {
   codes.forEach((c, i) => truthy(/^\d{6}$/.test(c), `trial ${i + 1} code ${c}`));
 });
 
+console.log("\ncoin bag");
+const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
+t("a new game places one bag on a reachable tile", () => {
+  for (let i = 0; i < 25; i++) {
+    const s = fresh();
+    truthy(s.coinBag, "coinBag must exist");
+    eq(s.coinBag.taken, false);
+    truthy(canWalk(map, s.coinBag.x, s.coinBag.y), `walkable at ${s.coinBag.x},${s.coinBag.y}`);
+    truthy(reach[s.coinBag.y * MAP_W + s.coinBag.x], "must be reachable from the gate");
+  }
+});
+t("the bag never shares a tile with an NPC", () => {
+  for (let i = 0; i < 25; i++) {
+    const s = fresh();
+    const key = `${s.coinBag.x},${s.coinBag.y}`;
+    for (const [id, p] of Object.entries(s.npcs)) {
+      truthy(`${p.x},${p.y}` !== key, `${id} sits on the bag`);
+    }
+  }
+});
+t("an older save with no bag gets one", () => {
+  const s = fresh();
+  delete s.coinBag;
+  eq(S.ensureCoinBag(s, map), true, "should report it added one");
+  truthy(s.coinBag, "bag added");
+  truthy(reach[s.coinBag.y * MAP_W + s.coinBag.x], "and it is reachable");
+  eq(S.ensureCoinBag(s, map), false, "second call is a no-op");
+});
+t("the pickup amount is ten", () => eq(S.COIN_BAG_AMOUNT, 10));
+
+console.log("\nquest markers");
+const { questMark } = await import("../js/render.js");
+t("shows ! before the quest is taken", () => {
+  const s = fresh();
+  eq(questMark(s, "cook"), "!");
+});
+t("shows ? once taken but not finished", () => {
+  const s = fresh();
+  s.quests.cook.state = S.QUEST.ACCEPTED;
+  eq(questMark(s, "cook"), "?");
+});
+t("shows nothing once completed", () => {
+  const s = fresh();
+  s.quests.cook.state = S.QUEST.DONE;
+  eq(questMark(s, "cook"), null);
+});
+t("warlock marks follow trial state", () => {
+  const s = fresh();
+  eq(questMark(s, "warlock"), "!", "trial available");
+  s.warlock.trials[0].state = S.TRIAL.ACCEPTED;
+  eq(questMark(s, "warlock"), "?", "trial accepted");
+  for (let i = 0; i < 7; i++) S.completeTrial(s, i);
+  eq(questMark(s, "warlock"), null, "all trials done");
+});
+
 console.log("\nsaving");
 t("save and load round-trips", () => {
   const s = fresh();
@@ -178,6 +233,14 @@ t("save and load round-trips", () => {
   eq(r.warlock.trials[0].state, S.TRIAL.DONE);
   eq(r.warlock.trials[1].state, S.TRIAL.AVAILABLE);
   eq(r.npcs.cook.x, s.npcs.cook.x, "npc positions must persist");
+  eq(r.coinBag.x, s.coinBag.x, "bag position must persist");
+});
+t("a taken bag stays taken across a save", () => {
+  const s = fresh();
+  s.coinBag.taken = true;
+  S.save(s);
+  eq(S.load().coinBag.taken, true);
+  S.clearSave();
 });
 t("hasSave reflects reality", () => {
   S.clearSave();

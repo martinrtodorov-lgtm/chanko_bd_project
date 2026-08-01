@@ -141,7 +141,9 @@ async function talkToWarlock(state, warlock) {
 
     const trialName = trialData["trial-name"] || "";
     if (trialState.state === TRIAL.AVAILABLE) {
-      text = i === 0 ? warlock["npc-greeting-text"] : trialData["trial-information"];
+      // Until the trial is accepted the Warlock gives nothing away — the
+      // details only appear once Chanko has committed to it.
+      text = warlock["npc-greeting-text"];
       options.push({ id: "accept", label: `I accept the ${ORDINALS[i]} trial`, note: trialName });
     } else {
       text = trialData["trial-information"];

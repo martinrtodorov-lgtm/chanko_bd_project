@@ -2,11 +2,27 @@
 // player sees black void past the map edge.
 
 import { TILE, VIEW_W, VIEW_H, T, PALETTE, tileAt } from "./map.js";
-import { playerFrame, npcFrame } from "./assets.js";
-import { WARLOCK_TILE, npcSpriteKey } from "./state.js";
+import { playerFrame, npcFrame, COIN_BAG_SRC } from "./assets.js";
+import { WARLOCK_TILE, npcSpriteKey, QUEST, TRIAL, currentTrialIndex } from "./state.js";
 
 const SPRITE_H = 64;          // on-screen height for Chanko and NPCs
 const WARLOCK_H = 76;
+const COIN_BAG_H = 44;
+
+/**
+ * "!" when the quest has not been taken, "?" once taken but not finished,
+ * nothing when it is done.
+ */
+export function questMark(state, id) {
+  if (id === "warlock") {
+    const i = currentTrialIndex(state);
+    if (i === -1) return null;
+    return state.warlock.trials[i].state === TRIAL.AVAILABLE ? "!" : "?";
+  }
+  const q = state.quests[id];
+  if (!q || q.state === QUEST.DONE) return null;
+  return q.state === QUEST.NONE ? "!" : "?";
+}
 
 // Cheap deterministic hash so tile decoration never flickers between frames.
 const hash = (x, y) => {
@@ -212,6 +228,17 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
     img: npcFrame(assets, "warlock"),
     h: WARLOCK_H,
   });
+  if (state.coinBag && !state.coinBag.taken) {
+    list.push({
+      label: "coin-bag",
+      pickup: true,
+      cx: (state.coinBag.x + 0.5) * TILE,
+      footY: (state.coinBag.y + 1) * TILE,
+      img: assets.images[COIN_BAG_SRC],
+      h: COIN_BAG_H,
+    });
+  }
+
   list.push({
     label: null,
     cx: state.player.x,
@@ -245,6 +272,23 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
 
     drawSprite(ctx, e.img, sx, sy, e.h);
 
+    // Quest marker floating above the nameplate
+    const mark = e.label && !e.pickup ? questMark(state, e.label) : null;
+    if (mark) {
+      const bob = Math.sin((anim.clock || 0) / 320 + e.cx * 0.01) * 3;
+      const my = sy - e.h - (e.name ? 40 : 18) + bob;
+      ctx.save();
+      ctx.font = "bold 34px Georgia, 'Times New Roman', serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "rgba(20, 14, 4, 0.9)";
+      ctx.strokeText(mark, sx, my);
+      ctx.fillStyle = "#ffd23c";
+      ctx.fillText(mark, sx, my);
+      ctx.restore();
+    }
+
     // Nameplate, so two NPCs sharing a skin stay tellable apart
     if (e.name) {
       const top = sy - e.h;
@@ -268,7 +312,7 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
       ctx.fillStyle = "#ffd23c";
       ctx.font = "bold 18px system-ui, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("E", sx, sy - e.h - 30);
+      ctx.fillText("E", sx, sy - e.h - (e.name ? 30 : 8));
       ctx.restore();
     }
   }
