@@ -38,7 +38,7 @@
       "trial-name": "Trial of Knowledge",
       "trial-information": "You are unstoppable physically but how much do you really know about pirates or vikings? There are 4 categories, Trivia, Literature and Mythology, Video Games or Music and difficulty from 100 to 500 points. The last person who guessed the answer correctly chooses which question they would like to answer. After the question is written on the board, the first person to raise their hand has the option to answer. If they answer wrong, the other players have a chance to steal the points. After all questions are answered, the game ends. Every 500 points equal a gold coin for each person.",
       "trial-hint": "Your teammates cannot help you but your enemies can try to outwit you.",
-      "trial-completion-message": "Your teammates cannot help you but your enemies can try to outwit you.",
+      "trial-completion-message": "How did you know all of this?",
       "trial-state": "locked",
       "trial-completion-code": "232247"
     },

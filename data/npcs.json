@@ -81,7 +81,7 @@
     "npc-nickname": "dr_Bul6it",
     "npc-profession": "hunter",
     "npc-portrait-reference": "assets/portraits/hunter.jpg",
-    "npc-greeting-text": ".",
+    "npc-greeting-text": "My dog is lost, have you seen him?",
     "npc-quest-information": "I love music and dancing, apart from hunting and fishing. Make three different people dance with you to three songs of my choice of three different nations. If you do so, I will follow you for life.",
     "npc-quest-completion-message": "Song is life, and I am alive.",
     "npc-quest-state": "not-accepted",
