@@ -2,12 +2,30 @@
 // player sees black void past the map edge.
 
 import { TILE, VIEW_W, VIEW_H, T, PALETTE, tileAt } from "./map.js";
-import { playerFrame, npcFrame, COIN_BAG_SRC } from "./assets.js";
+import { playerFrame, npcFrame, ghostFrame, COIN_BAG_SRC } from "./assets.js";
 import { WARLOCK_TILE, npcSpriteKey, QUEST, TRIAL, currentTrialIndex } from "./state.js";
 
 const SPRITE_H = 64;          // on-screen height for Chanko and NPCs
 const WARLOCK_H = 76;
 const COIN_BAG_H = 44;
+const HEART_R = 13;
+const GHOST_H = 64;
+
+/** A pickup heart, drawn rather than loaded — no art needed. */
+function drawHeart(ctx, cx, cy, r, fill = "#e0384a", edge = "#7d1622") {
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + r * 0.85);
+  ctx.bezierCurveTo(cx - r * 1.5, cy - r * 0.35, cx - r * 0.55, cy - r * 1.25, cx, cy - r * 0.4);
+  ctx.bezierCurveTo(cx + r * 0.55, cy - r * 1.25, cx + r * 1.5, cy - r * 0.35, cx, cy + r * 0.85);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = edge;
+  ctx.stroke();
+  ctx.restore();
+}
 
 /**
  * "!" when the quest has not been taken, "?" once taken but not finished,
@@ -228,6 +246,32 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
     img: npcFrame(assets, "warlock"),
     h: WARLOCK_H,
   });
+  if (state.hearts) {
+    state.hearts.forEach((h, i) => {
+      if (h.taken) return;
+      list.push({
+        label: `heart-${i}`,
+        pickup: true,
+        heart: true,
+        cx: (h.x + 0.5) * TILE,
+        footY: (h.y + 1) * TILE,
+        h: HEART_R * 2,
+      });
+    });
+  }
+
+  if (state.ghost) {
+    list.push({
+      label: "ghost",
+      name: "EX",
+      ghost: true,
+      cx: state.ghost.x,
+      footY: state.ghost.y + TILE / 2,
+      img: ghostFrame(assets, state.ghost.dir, state.ghost.frame | 0),
+      h: GHOST_H,
+    });
+  }
+
   if (state.coinBag && !state.coinBag.taken) {
     list.push({
       label: "coin-bag",
@@ -257,6 +301,20 @@ export function drawEntities(ctx, state, assets, cam, anim, nearbyLabel, map) {
     if (e.prop) {
       if (e.img) {
         ctx.drawImage(e.img, Math.round(sx - e.w / 2), Math.round(sy - e.h), e.w, e.h);
+      }
+      continue;
+    }
+
+    if (e.heart) {
+      const bob = Math.sin((anim.clock || 0) / 300 + e.cx * 0.02) * 3;
+      drawHeart(ctx, sx, sy - HEART_R - 6 + bob, HEART_R);
+      if (e.label === nearbyLabel) {
+        ctx.save();
+        ctx.fillStyle = "#ffd23c";
+        ctx.font = "bold 18px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("E", sx, sy - HEART_R * 2 - 14);
+        ctx.restore();
       }
       continue;
     }

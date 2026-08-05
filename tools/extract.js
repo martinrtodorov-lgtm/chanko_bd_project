@@ -3,9 +3,9 @@
 //
 //   node extract.js <sheet.png> <outDir> [--tol 12] [--minArea 900] [--gap 14]
 
-const fs = require("fs");
-const path = require("path");
-const { PNG } = require("pngjs");
+import fs from "fs";
+import path from "path";
+import { PNG } from "pngjs";
 
 const args = process.argv.slice(2);
 const [srcPath, outDir] = args;

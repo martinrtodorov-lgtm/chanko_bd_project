@@ -104,5 +104,33 @@
         "assets/sprites/npc/warlock/pose-03.png"
       ]
     }
+  },
+  "ghost": {
+    "walk": {
+      "down": [
+        "assets/sprites/npc/ghost/walk-down-0.png",
+        "assets/sprites/npc/ghost/walk-down-1.png",
+        "assets/sprites/npc/ghost/walk-down-2.png",
+        "assets/sprites/npc/ghost/walk-down-3.png"
+      ],
+      "left": [
+        "assets/sprites/npc/ghost/walk-left-0.png",
+        "assets/sprites/npc/ghost/walk-left-1.png",
+        "assets/sprites/npc/ghost/walk-left-2.png",
+        "assets/sprites/npc/ghost/walk-left-3.png"
+      ],
+      "right": [
+        "assets/sprites/npc/ghost/walk-right-0.png",
+        "assets/sprites/npc/ghost/walk-right-1.png",
+        "assets/sprites/npc/ghost/walk-right-2.png",
+        "assets/sprites/npc/ghost/walk-right-3.png"
+      ],
+      "up": [
+        "assets/sprites/npc/ghost/walk-up-0.png",
+        "assets/sprites/npc/ghost/walk-up-1.png",
+        "assets/sprites/npc/ghost/walk-up-2.png",
+        "assets/sprites/npc/ghost/walk-up-3.png"
+      ]
+    }
   }
 }

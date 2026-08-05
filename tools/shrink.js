@@ -1,8 +1,8 @@
 // Downscale packaged frames in place, capping height. Box filter with
 // alpha-weighted averaging so edges don't pick up halos from transparent pixels.
-const fs = require("fs");
-const path = require("path");
-const { PNG } = require("pngjs");
+import fs from "fs";
+import path from "path";
+import { PNG } from "pngjs";
 
 const REPO = "C:/Users/marti/dev/chanko_bd_project/assets/sprites";
 const MAX_H = Number(process.argv[2] || 160);

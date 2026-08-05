@@ -40,6 +40,11 @@ for (const d of ["up", "down", "left", "right"]) {
   sprites.player.attack[d].forEach((p) => refs.add(p));
 }
 for (const n of Object.values(sprites.npcs)) refs.add(n.idle);
+if (sprites.ghost) {
+  for (const d of ["up", "down", "left", "right"]) sprites.ghost.walk[d].forEach((p) => refs.add(p));
+} else {
+  fail("sprites.json has no ghost frames");
+}
 for (const n of npcs) refs.add(n["npc-portrait-reference"]);
 refs.add(warlock["npc-portrait-reference"]);
 refs.add("assets/ui/start_screen.jpg");

@@ -417,3 +417,34 @@ export function showEnding() {
   mount(layer);
   requestAnimationFrame(() => layer.classList.add("is-lit"));
 }
+
+/**
+ * Game over. Fades to black, holds the line, then resolves so the caller can
+ * send the player back to the start screen.
+ */
+export function showCurseEnding() {
+  return new Promise((resolve) => {
+    const layer = panel("layer-ending layer-curse");
+    layer.innerHTML = `
+      <div class="ending-inner">
+        <div class="ending-text">You have been unable to break a lifelong curse.</div>
+        <button type="button" class="menu-button" id="curse-return">Return to the start</button>
+      </div>`;
+    const close = mount(layer);
+    requestAnimationFrame(() => layer.classList.add("is-lit"));
+
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      window.removeEventListener("keydown", onKey, true);
+      close();
+      resolve();
+    };
+    const onKey = (e) => { e.preventDefault(); e.stopPropagation(); finish(); };
+    const timer = setTimeout(finish, 6000);
+    layer.querySelector("#curse-return").addEventListener("click", finish);
+    setTimeout(() => window.addEventListener("keydown", onKey, true), 1200);
+  });
+}

@@ -177,15 +177,93 @@ t("the bag never shares a tile with an NPC", () => {
     }
   }
 });
-t("an older save with no bag gets one", () => {
+t("an older save missing new fields has them filled in", () => {
   const s = fresh();
-  delete s.coinBag;
-  eq(S.ensureCoinBag(s, map), true, "should report it added one");
-  truthy(s.coinBag, "bag added");
-  truthy(reach[s.coinBag.y * MAP_W + s.coinBag.x], "and it is reachable");
-  eq(S.ensureCoinBag(s, map), false, "second call is a no-op");
+  delete s.coinBag; delete s.lives; delete s.hearts; delete s.ghost;
+  const added = S.ensureExtras(s, map);
+  eq(added.sort().join(","), "coinBag,ghost,hearts,lives");
+  truthy(reach[s.coinBag.y * MAP_W + s.coinBag.x], "bag reachable");
+  eq(s.lives, S.MAX_LIVES);
+  eq(s.hearts.length, S.HEART_PICKUPS);
+  truthy(s.ghost && typeof s.ghost.x === "number", "ghost placed");
+  eq(S.ensureExtras(s, map).length, 0, "second call is a no-op");
 });
 t("the pickup amount is ten", () => eq(S.COIN_BAG_AMOUNT, 10));
+
+console.log("\nlives, hearts and the ghost");
+t("a new game starts on three hearts", () => {
+  const s = fresh();
+  eq(s.lives, 3);
+  eq(S.MAX_LIVES, 3);
+});
+t("five heart pickups, all reachable and untaken", () => {
+  for (let i = 0; i < 20; i++) {
+    const s = fresh();
+    eq(s.hearts.length, 5);
+    for (const h of s.hearts) {
+      eq(h.taken, false);
+      truthy(canWalk(map, h.x, h.y), `walkable at ${h.x},${h.y}`);
+      truthy(reach[h.y * MAP_W + h.x], "reachable");
+    }
+  }
+});
+t("hearts do not overlap each other, NPCs or the bag", () => {
+  for (let i = 0; i < 20; i++) {
+    const s = fresh();
+    const seen = new Set([`${s.coinBag.x},${s.coinBag.y}`]);
+    for (const p of Object.values(s.npcs)) seen.add(`${p.x},${p.y}`);
+    for (const h of s.hearts) {
+      const k = `${h.x},${h.y}`;
+      truthy(!seen.has(k), `heart collides at ${k}`);
+      seen.add(k);
+    }
+  }
+});
+t("losing a life reports death only on the last one", () => {
+  const s = fresh();
+  eq(S.loseLife(s), false); eq(s.lives, 2);
+  eq(S.loseLife(s), false); eq(s.lives, 1);
+  eq(S.loseLife(s), true);  eq(s.lives, 0);
+  eq(S.loseLife(s), true, "never goes negative"); eq(s.lives, 0);
+});
+t("gaining a life caps at three", () => {
+  const s = fresh();
+  s.lives = 1;
+  eq(S.gainLife(s), true); eq(s.lives, 2);
+  eq(S.gainLife(s), true); eq(s.lives, 3);
+  eq(S.gainLife(s), false, "already full"); eq(s.lives, 3);
+});
+t("the ghost spawns far from the player", () => {
+  for (let i = 0; i < 20; i++) {
+    const s = fresh();
+    const d = Math.hypot(s.ghost.x - s.player.x, s.ghost.y - s.player.y);
+    truthy(d >= 1400, `only ${Math.round(d)}px away`);
+  }
+});
+t("respawnTile keeps its distance and stays walkable", () => {
+  const s = fresh();
+  for (let i = 0; i < 40; i++) {
+    const t2 = S.respawnTile(map, s.player.x, s.player.y);
+    truthy(canWalk(map, t2.x, t2.y), "walkable");
+    truthy(reach[t2.y * MAP_W + t2.x], "reachable");
+    const d = Math.hypot((t2.x + 0.5) * 32 - s.player.x, (t2.y + 0.5) * 32 - s.player.y);
+    truthy(d >= 1400, `only ${Math.round(d)}px away`);
+  }
+});
+t("lives, hearts and ghost survive a save", () => {
+  const s = fresh();
+  S.loseLife(s);
+  s.hearts[0].taken = true;
+  s.ghost.x = 999; s.ghost.dir = "left";
+  S.save(s);
+  const r = S.load();
+  eq(r.lives, 2);
+  eq(r.hearts[0].taken, true);
+  eq(r.hearts[1].taken, false);
+  eq(r.ghost.x, 999);
+  eq(r.ghost.dir, "left");
+  S.clearSave();
+});
 
 console.log("\nquest markers");
 const { questMark } = await import("../js/render.js");

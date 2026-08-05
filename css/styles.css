@@ -117,6 +117,30 @@ button { font-family: inherit; }
 .hud-row { display: flex; justify-content: space-between; gap: 1rem; }
 .hud-row b { color: var(--gold); }
 
+.lives {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: none;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(10, 8, 5, 0.82);
+  border: 2px solid var(--edge);
+  border-radius: var(--radius);
+}
+.lives.is-visible { display: flex; }
+
+.lives .heart {
+  width: 26px;
+  height: 26px;
+  transition: opacity 200ms ease, filter 200ms ease, transform 200ms ease;
+}
+.lives .heart.is-lost {
+  opacity: 0.35;
+  filter: grayscale(1);
+  transform: scale(0.86);
+}
+
 .controls-hint {
   position: absolute;
   left: 14px;
@@ -432,3 +456,12 @@ kbd {
   line-height: 1.4;
   color: var(--gold);
 }
+
+.layer-curse { transition-duration: 1.6s; }
+.ending-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.2rem;
+}
+.layer-curse .ending-text { color: #c9c2b4; }

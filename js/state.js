@@ -10,6 +10,9 @@ export const TRIAL = { LOCKED: "locked", AVAILABLE: "available", ACCEPTED: "acce
 export const PLAYER_TEAM_CAP = 8;   // Chanko + 7
 export const ENEMY_TEAM_CAP = 8;
 export const COIN_BAG_AMOUNT = 10;
+export const MAX_LIVES = 3;
+export const HEART_PICKUPS = 5;
+export const DC_WISDOM_SAVE = 10;
 export const DC_OWN_TEAM = 13;
 export const DC_OPPOSING = 18;
 export const DC_WARLOCK_HINT = 15;
@@ -17,6 +20,30 @@ export const DC_WARLOCK_HINT = 15;
 // The Warlock stands inside the villa, just below the tavern — a fixed,
 // findable landmark, since he gates the win condition.
 export const WARLOCK_TILE = { x: 108, y: 62 };
+
+/** Every tile you can actually stand on, as flat indices. */
+function openTiles(map) {
+  const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
+  const open = [];
+  for (let i = 0; i < reach.length; i++) if (reach[i]) open.push(i);
+  return open;
+}
+
+const asTile = (p) => ({ x: p % MAP_W, y: (p / MAP_W) | 0 });
+
+/**
+ * A reachable tile at least `minAway` pixels from (fromX, fromY), used to drop
+ * the ghost back onto the map somewhere the player is not standing.
+ */
+export function respawnTile(map, fromX, fromY, minAway = 1400) {
+  const open = openTiles(map);
+  for (let attempt = 0; attempt < 400; attempt++) {
+    const t = asTile(open[(Math.random() * open.length) | 0]);
+    const d = Math.hypot((t.x + 0.5) * TILE - fromX, (t.y + 0.5) * TILE - fromY);
+    if (d >= minAway) return t;
+  }
+  return asTile(open[(Math.random() * open.length) | 0]);
+}
 
 export function createState(faction, npcData, map = generateMap()) {
   const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
@@ -49,13 +76,25 @@ export function createState(faction, npcData, map = generateMap()) {
     quests[id] = { state: QUEST.NONE, sweetTalkFailed: false };
   }
 
+  const playerX = (SPAWN_ANCHOR.x + 0.5) * TILE;
+  const playerY = (SPAWN_ANCHOR.y + 0.5) * TILE;
+  const ghostTile = respawnTile(map, playerX, playerY);
+
   return {
     version: 1,
     faction,
     coinBag: { ...pickTile(), taken: false },
+    lives: MAX_LIVES,
+    hearts: Array.from({ length: HEART_PICKUPS }, () => ({ ...pickTile(), taken: false })),
+    ghost: {
+      x: (ghostTile.x + 0.5) * TILE,
+      y: (ghostTile.y + 0.5) * TILE,
+      dir: "down",
+      frame: 0,
+    },
     player: {
-      x: (SPAWN_ANCHOR.x + 0.5) * TILE,
-      y: (SPAWN_ANCHOR.y + 0.5) * TILE,
+      x: playerX,
+      y: playerY,
       dir: "right",
     },
     teams,
@@ -72,17 +111,39 @@ export function createState(faction, npcData, map = generateMap()) {
 }
 
 /**
- * Saves written before the coin bag existed have no pickup at all. Give them
- * one so an older save still gets the gold rather than silently missing it.
+ * Fills in anything a save predates — the coin bag, lives, heart pickups, the
+ * ghost. Returns the names of the fields it added, so an older save keeps its
+ * quest progress instead of being rejected.
  */
-export function ensureCoinBag(state, map) {
-  if (state.coinBag) return false;
-  const reach = computeReachable(map, SPAWN_ANCHOR.x, SPAWN_ANCHOR.y);
-  const open = [];
-  for (let i = 0; i < reach.length; i++) if (reach[i]) open.push(i);
-  const p = open[(Math.random() * open.length) | 0];
-  state.coinBag = { x: p % MAP_W, y: (p / MAP_W) | 0, taken: false };
-  return true;
+export function ensureExtras(state, map) {
+  const added = [];
+  const open = openTiles(map);
+  const pick = () => asTile(open[(Math.random() * open.length) | 0]);
+
+  if (!state.coinBag) { state.coinBag = { ...pick(), taken: false }; added.push("coinBag"); }
+  if (typeof state.lives !== "number") { state.lives = MAX_LIVES; added.push("lives"); }
+  if (!Array.isArray(state.hearts)) {
+    state.hearts = Array.from({ length: HEART_PICKUPS }, () => ({ ...pick(), taken: false }));
+    added.push("hearts");
+  }
+  if (!state.ghost) {
+    const t = respawnTile(map, state.player.x, state.player.y);
+    state.ghost = { x: (t.x + 0.5) * TILE, y: (t.y + 0.5) * TILE, dir: "down", frame: 0 };
+    added.push("ghost");
+  }
+  return added;
+}
+
+/** Drops a life. Returns true when that was the last one. */
+export function loseLife(state) {
+  state.lives = Math.max(0, state.lives - 1);
+  return state.lives === 0;
+}
+
+export function gainLife(state, n = 1) {
+  const before = state.lives;
+  state.lives = Math.min(MAX_LIVES, state.lives + n);
+  return state.lives !== before;
 }
 
 // --- Team helpers ----------------------------------------------------------

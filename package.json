@@ -10,6 +10,7 @@
     "map-preview": "node tools/map-preview.js",
     "smoke": "node tools/browser-smoke.js",
     "features": "node tools/browser-features.js",
+    "combat": "node tools/browser-combat.js",
     "smoke:live": "node tools/browser-smoke.js https://martinrtodorov-lgtm.github.io/chanko_bd_project/"
   }
 }

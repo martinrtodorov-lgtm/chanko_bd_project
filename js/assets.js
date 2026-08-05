@@ -55,6 +55,9 @@ export async function loadAssets(onProgress = () => {}) {
     spriteIndex.player.attack[d].forEach((p) => paths.add(p));
   }
   for (const npc of Object.values(spriteIndex.npcs)) paths.add(npc.idle);
+  if (spriteIndex.ghost) {
+    for (const d of DIRS) spriteIndex.ghost.walk[d].forEach((p) => paths.add(p));
+  }
   for (const npc of npcs) paths.add(npc["npc-portrait-reference"]);
   paths.add(warlock["npc-portrait-reference"]);
   paths.add(COIN_BAG_SRC);
@@ -121,6 +124,13 @@ export function playerFrame(assets, dir, action, frame) {
 
 export function npcFrame(assets, spriteKey) {
   return assets.images[assets.spriteIndex.npcs[spriteKey].idle];
+}
+
+export function ghostFrame(assets, dir, frame) {
+  const g = assets.spriteIndex.ghost;
+  if (!g) return null;
+  const frames = g.walk[dir] || g.walk.down;
+  return assets.images[frames[frame % frames.length]];
 }
 
 export function portrait(assets, ref) {
