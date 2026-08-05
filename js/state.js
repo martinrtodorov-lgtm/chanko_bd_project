@@ -1,6 +1,8 @@
 // Game state, spawning, and persistence.
 
-import { generateMap, computeReachable, MAP_W, TILE, REGION, SPAWN_ANCHOR } from "./map.js";
+import {
+  generateMap, computeReachable, MAP_W, TILE, REGION, SPAWN_ANCHOR, VIEW_W, VIEW_H,
+} from "./map.js";
 
 export const SAVE_KEY = "chanko.save.v1";
 export const TEAM = { PLAYER: "player", ENEMY: "enemy", NEUTRAL: "neutral" };
@@ -13,6 +15,25 @@ export const COIN_BAG_AMOUNT = 10;
 export const MAX_LIVES = 3;
 export const HEART_PICKUPS = 5;
 export const DC_WISDOM_SAVE = 10;
+
+// --- Chase tuning ----------------------------------------------------------
+
+export const PLAYER_SPEED = 350;        // px per second
+export const GHOST_CHASE_BONUS = 1.10;  // applied only while she shares his screen
+export const GHOST_TOUCH = 26;          // px between centres that counts as caught
+export const SLASH_REACH = 80;
+
+/** Whether (ax, ay) falls inside the viewport centred on the player. */
+export const onSameScreen = (ax, ay, px, py) =>
+  Math.abs(ax - px) <= VIEW_W / 2 && Math.abs(ay - py) <= VIEW_H / 2;
+
+/**
+ * The ghost always walks toward Chanko at his own pace; sharing his screen is
+ * the only thing that makes her faster.
+ */
+export function ghostSpeed(ghost, player) {
+  return PLAYER_SPEED * (onSameScreen(ghost.x, ghost.y, player.x, player.y) ? GHOST_CHASE_BONUS : 1);
+}
 export const DC_OWN_TEAM = 13;
 export const DC_OPPOSING = 18;
 export const DC_WARLOCK_HINT = 15;

@@ -4,7 +4,8 @@ import { generateMap, canWalk, TILE, VIEW_W, VIEW_H } from "./map.js";
 import { loadAssets } from "./assets.js";
 import {
   createState, load, save, hasSave, ensureExtras, respawnTile, loseLife, gainLife,
-  WARLOCK_TILE, COIN_BAG_AMOUNT, MAX_LIVES, DC_WISDOM_SAVE,
+  ghostSpeed, WARLOCK_TILE, COIN_BAG_AMOUNT, MAX_LIVES, DC_WISDOM_SAVE,
+  PLAYER_SPEED as SPEED, GHOST_TOUCH, SLASH_REACH,
 } from "./state.js";
 import { cameraFor, drawWorld, drawEntities } from "./render.js";
 import {
@@ -13,17 +14,12 @@ import {
 } from "./ui.js";
 import { interactWith } from "./interact.js";
 
-const SPEED = 350;              // px per second
 const BODY_W = 20, BODY_H = 14; // collision box around the feet
 const WALK_FRAME_MS = 130;
 const ATTACK_MS = 320;
 const INTERACT_RANGE = 58;
 
-// The ghost matches Chanko's pace, and picks up 15% once it can see him.
-const GHOST_CHASE_BONUS = 1.15;
-const GHOST_TOUCH = 26;         // px between centres that counts as caught
-const SLASH_REACH = 80;         // how far a swing lands
-const WANDER_RETARGET_MS = 1400;
+// Chase tuning lives in state.js so it can be tested without a browser.
 
 const screens = {
   start: document.getElementById("start-screen"),
@@ -85,42 +81,21 @@ function moveWithSlide(pos, dx, dy, step) {
   return moved;
 }
 
-const onSameScreen = (x, y) =>
-  Math.abs(x - state.player.x) <= VIEW_W / 2 &&
-  Math.abs(y - state.player.y) <= VIEW_H / 2;
-
 function sendGhostAway() {
   const t = respawnTile(map, state.player.x, state.player.y);
   state.ghost.x = (t.x + 0.5) * TILE;
   state.ghost.y = (t.y + 0.5) * TILE;
-  state.ghost.wanderT = 0;
 }
 
 function updateGhost(dt) {
   const g = state.ghost;
   if (!g) return;
 
-  const chasing = onSameScreen(g.x, g.y);
-  const speed = SPEED * (chasing ? GHOST_CHASE_BONUS : 1);
+  // She always knows exactly where he is — the screen only decides her pace.
+  const dx = state.player.x - g.x;
+  const dy = state.player.y - g.y;
 
-  let dx, dy;
-  if (chasing) {
-    // Head straight for Chanko.
-    dx = state.player.x - g.x;
-    dy = state.player.y - g.y;
-  } else {
-    // Drift, re-rolling the heading periodically or when it hits something.
-    g.wanderT = (g.wanderT || 0) - dt * 1000;
-    if (g.wanderT <= 0 || (!g.wx && !g.wy)) {
-      const a = Math.random() * Math.PI * 2;
-      g.wx = Math.cos(a); g.wy = Math.sin(a);
-      g.wanderT = WANDER_RETARGET_MS;
-    }
-    dx = g.wx; dy = g.wy;
-  }
-
-  const moved = moveWithSlide(g, dx, dy, speed * dt);
-  if (!moved && !chasing) g.wanderT = 0;
+  moveWithSlide(g, dx, dy, ghostSpeed(g, state.player) * dt);
 
   // Face travel direction, horizontal winning ties like the player.
   if (Math.abs(dx) >= Math.abs(dy)) g.dir = dx < 0 ? "left" : "right";

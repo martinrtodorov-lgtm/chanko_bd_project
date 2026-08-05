@@ -120,6 +120,27 @@ const check = (c, m) => { if (c) { pass++; log(`PASS  ${m}`); } else { fail++; l
     await p.close();
   }
 
+  // --- She hunts from off screen too ---------------------------------------
+  // The page only writes to localStorage on its 5s autosave, so poll for the
+  // distance to fall rather than sampling twice in quick succession.
+  log("\noff-screen pursuit");
+  {
+    const p = await resume(`s.ghost.x = s.player.x + 4000; s.ghost.y = s.player.y + 2000;`);
+    const gap = async () => {
+      const s = await liveState(p);
+      return Math.hypot(s.ghost.x - s.player.x, s.ghost.y - s.player.y);
+    };
+    const start = await gap();
+    let now = start;
+    for (let i = 0; i < 40 && now > start - 800; i++) {
+      await p.waitForTimeout(500);
+      now = await gap();
+    }
+    check(now < start - 800,
+      `closes in from far off screen: ${Math.round(start)}px -> ${Math.round(now)}px`);
+    await p.close();
+  }
+
   // --- Slashing banishes it without damage --------------------------------
   log("\nslash");
   {

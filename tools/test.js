@@ -250,6 +250,29 @@ t("respawnTile keeps its distance and stays walkable", () => {
     truthy(d >= 1400, `only ${Math.round(d)}px away`);
   }
 });
+t("the screen bonus is 10 percent, and only on screen", () => {
+  eq(S.GHOST_CHASE_BONUS, 1.10);
+  const player = { x: 10000, y: 10000 };
+  const near = { x: 10000 + 600, y: 10000 };          // inside the 1280x704 view
+  const far = { x: 10000 + 3000, y: 10000 };          // well outside it
+  eq(S.ghostSpeed(near, player), S.PLAYER_SPEED * 1.10);
+  eq(S.ghostSpeed(far, player), S.PLAYER_SPEED);
+  truthy(S.ghostSpeed(near, player) > S.ghostSpeed(far, player), "faster up close");
+});
+t("the screen test matches the viewport exactly", () => {
+  const px = 5000, py = 5000;
+  truthy(S.onSameScreen(px, py, px, py), "on top of him");
+  truthy(S.onSameScreen(px + 639, py + 351, px, py), "just inside the corner");
+  truthy(!S.onSameScreen(px + 641, py, px, py), "one px past the right edge");
+  truthy(!S.onSameScreen(px, py + 353, px, py), "one px past the bottom edge");
+});
+t("she never idles — pursuit speed is always positive", () => {
+  const player = { x: 0, y: 0 };
+  for (const d of [0, 100, 700, 5000, 40000]) {
+    truthy(S.ghostSpeed({ x: d, y: 0 }, player) >= S.PLAYER_SPEED, `at ${d}px`);
+  }
+});
+
 t("lives, hearts and ghost survive a save", () => {
   const s = fresh();
   S.loseLife(s);
